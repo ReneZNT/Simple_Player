@@ -1,11 +1,12 @@
-import 'package:video_player/video_player.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 class SimpleController extends ChangeNotifier {
   late VideoPlayerController videoPlayerController;
   late Duration position = const Duration().abs();
-  bool show = false;
+  bool show = true;
   String _changePlay = '';
 
   SimpleController();
