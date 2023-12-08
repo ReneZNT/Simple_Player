@@ -5,6 +5,7 @@ import 'dart:async';
 class SimpleController extends ChangeNotifier {
   late VideoPlayerController videoPlayerController;
   late Duration position = const Duration().abs();
+  bool show = false;
   String _changePlay = '';
 
   SimpleController();
@@ -20,6 +21,11 @@ class SimpleController extends ChangeNotifier {
   void pause() {
     _changePlay = DateTime.now().toString();
     videoPlayerController.pause();
+    notifyListeners();
+  }
+
+  void showButtons() {
+    show = !show;
     notifyListeners();
   }
 

@@ -32,12 +32,13 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   /// Attributes
   late VideoPlayerController _videoPlayerController;
   late AnimationController _animationController;
+  late SimpleController simpleController = widget.simpleController;
   double? _currentSeconds = 0.0;
   double? _totalSeconds = 0.0;
   double? _speed = 1.0;
   String? _showTime = '-:-';
   String? _tittle = '';
-  bool? _visibleControls = true;
+  // bool? _visibleControls = true;
   bool? _visibleSettings = false;
   bool? _autoPlay = false;
   bool? _loopMode = false;
@@ -87,7 +88,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   _showAndHideControls(bool show) {
     /// Show the control interface
     setState(() {
-      _visibleControls = show;
+      simpleController.showButtons();
     });
   }
 
@@ -194,13 +195,13 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   }
 
   /// Treat screen tapping to show or hide simple controllers.
-  _screenTap() {
-    if (_visibleControls!) {
-      _showAndHideControls(false);
-    } else {
-      _showAndHideControls(true);
-    }
-  }
+  // _screenTap() {
+  //   if (simpleController.show) {
+  //     _showAndHideControls(false);
+  //   } else {
+  //     _showAndHideControls(true);
+  //   }
+  // }
 
   /// Responsible for correct initialization of all controllers.
   _setupControllers(SimplePlayerSettings simplePlayerSettings) {
@@ -328,113 +329,109 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                           (Widget child, Animation<double> animation) {
                         return FadeTransition(opacity: animation, child: child);
                       },
-                      child: _visibleControls!
-                          ? GestureDetector(
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                key: const ValueKey('a'),
-                                color: _confortMode!
-                                    ? Colors.deepOrange.withOpacity(0.1)
-                                    : Colors.black.withOpacity(0.2),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 16),
-                                          child: Text(
-                                            _tittle!,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              shadows: [
-                                                Shadow(
-                                                  blurRadius: 10.0,
-                                                  color: Colors.black,
-                                                  offset: Offset(3.0, 2.0),
-                                                ),
-                                              ],
-                                            ),
+                      child: simpleController.show
+                          ? AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              key: const ValueKey('a'),
+                              color: _confortMode!
+                                  ? Colors.deepOrange.withOpacity(0.1)
+                                  : Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: Text(
+                                          _tittle!,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 10.0,
+                                                color: Colors.black,
+                                                offset: Offset(3.0, 2.0),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        IconButton(
-                                          padding: const EdgeInsets.all(0),
-                                          icon: const Icon(
-                                            Icons.settings_outlined,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () {
-                                            _showScreenSettings();
+                                      ),
+                                      IconButton(
+                                        padding: const EdgeInsets.all(0),
+                                        icon: const Icon(
+                                          Icons.settings_outlined,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          _showScreenSettings();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: IconButton(
+                                          icon: AnimatedIcon(
+                                              size: 15,
+                                              color: Colors.white,
+                                              icon: AnimatedIcons.play_pause,
+                                              progress: _animationController),
+                                          onPressed: () => _playAndPauseSwitch(
+                                              pauseButton: true),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          child: SliderTheme(
+                                        data: constants.getSliderThemeData(
+                                            colorAccent: _colorAccent),
+                                        child: Slider.adaptive(
+                                          value: _currentSeconds!,
+                                          max: _totalSeconds!,
+                                          min: 0,
+                                          label: _currentSeconds.toString(),
+                                          onChanged: (double value) {
+                                            _jumpTo(value);
                                           },
                                         ),
-                                      ],
-                                    ),
-                                    Expanded(
-                                      child: Center(
-                                        child: IconButton(
-                                            icon: AnimatedIcon(
-                                                size: 40,
-                                                color: Colors.white,
-                                                icon: AnimatedIcons.play_pause,
-                                                progress: _animationController),
-                                            onPressed: () =>
-                                                _playAndPauseSwitch(
-                                                    pauseButton: true)),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 16),
-                                            child: Text(_showTime!,
-                                                style: const TextStyle(
-                                                    color: Colors.white))),
-                                        Expanded(
-                                            child: SliderTheme(
-                                          data: constants.getSliderThemeData(
-                                              colorAccent: _colorAccent),
-                                          child: Slider.adaptive(
-                                            value: _currentSeconds!,
-                                            max: _totalSeconds!,
-                                            min: 0,
-                                            label: _currentSeconds.toString(),
-                                            onChanged: (double value) {
-                                              _jumpTo(value);
-                                            },
-                                          ),
-                                        )),
-                                        IconButton(
-                                          padding: const EdgeInsets.all(0),
-                                          icon: const Icon(
-                                            Icons.fullscreen,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () => _fullScreenManager(),
+                                      )),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: Text(
+                                          _showTime!,
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                      ),
+                                      IconButton(
+                                        padding: const EdgeInsets.all(0),
+                                        icon: const Icon(
+                                          Icons.fullscreen,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () => _fullScreenManager(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              onTap: () => _screenTap(),
                             )
-                          : GestureDetector(
-                              child: AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                key: const ValueKey('b'),
-                                color: _confortMode!
-                                    ? Colors.deepOrange.withOpacity(0.1)
-                                    : Colors.transparent,
-                                height: height,
-                              ),
-                              onTap: () => _screenTap(),
+                          : AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              key: const ValueKey('b'),
+                              color: _confortMode!
+                                  ? Colors.deepOrange.withOpacity(0.1)
+                                  : Colors.transparent,
+                              height: height,
                             ),
                     ),
                   )
