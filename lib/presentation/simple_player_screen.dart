@@ -1,13 +1,15 @@
-import 'widgets/settings_screen.dart';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:simple_player/simple_player.dart';
 import 'package:video_player/video_player.dart';
+
 import '../aplication/simple_aplication.dart';
-import '../model/simple_player_state.dart';
-import 'simple_player_fullscreen.dart';
-import 'package:flutter/material.dart';
 import '../constants/constants.dart';
 import '../core/date_formatter.dart';
-import 'dart:async';
+import '../model/simple_player_state.dart';
+import 'simple_player_fullscreen.dart';
+import 'widgets/settings_screen.dart';
 
 class SimplePlayerScrren extends StatefulWidget {
   final SimpleController simpleController;
@@ -324,116 +326,155 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
             _videoPlayerController.value.isInitialized
                 ? Center(
                     child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
-                      child: simpleController.show
-                          ? AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              key: const ValueKey('a'),
-                              color: _confortMode!
-                                  ? Colors.deepOrange.withOpacity(0.1)
-                                  : Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
-                                        child: Text(
-                                          _tittle!,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            shadows: [
-                                              Shadow(
-                                                blurRadius: 10.0,
-                                                color: Colors.black,
-                                                offset: Offset(3.0, 2.0),
-                                              ),
-                                            ],
+                        duration: const Duration(milliseconds: 200),
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) {
+                          return FadeTransition(
+                              opacity: animation, child: child);
+                        },
+                        child: simpleController.show
+                            ? AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                key: const ValueKey('a'),
+                                color: _confortMode!
+                                    ? Colors.deepOrange.withOpacity(0.1)
+                                    : Colors.transparent,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 16),
+                                          child: Text(
+                                            _tittle!,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              shadows: [
+                                                Shadow(
+                                                  blurRadius: 10.0,
+                                                  color: Colors.black,
+                                                  offset: Offset(3.0, 2.0),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        padding: const EdgeInsets.all(0),
-                                        icon: const Icon(
-                                          Icons.settings_outlined,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          _showScreenSettings();
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
-                                        child: IconButton(
-                                          icon: AnimatedIcon(
-                                              size: 15,
-                                              color: Colors.white,
-                                              icon: AnimatedIcons.play_pause,
-                                              progress: _animationController),
-                                          onPressed: () => _playAndPauseSwitch(
-                                              pauseButton: true),
-                                        ),
-                                      ),
-                                      Expanded(
-                                          child: SliderTheme(
-                                        data: constants.getSliderThemeData(
-                                            colorAccent: _colorAccent),
-                                        child: Slider.adaptive(
-                                          value: _currentSeconds!,
-                                          max: _totalSeconds!,
-                                          min: 0,
-                                          label: _currentSeconds.toString(),
-                                          onChanged: (double value) {
-                                            _jumpTo(value);
+                                        IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          icon: const Icon(
+                                            Icons.settings_outlined,
+                                            color: Colors.white,
+                                          ),
+                                          onPressed: () {
+                                            _showScreenSettings();
                                           },
                                         ),
-                                      )),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 16),
-                                        child: Text(
-                                          _showTime!,
-                                          style: const TextStyle(
-                                              color: Colors.white),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 16),
+                                          child: IconButton(
+                                            icon: AnimatedIcon(
+                                                size: 15,
+                                                color: Colors.white,
+                                                icon: AnimatedIcons.play_pause,
+                                                progress: _animationController),
+                                            onPressed: () =>
+                                                _playAndPauseSwitch(
+                                                    pauseButton: true),
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        padding: const EdgeInsets.all(0),
-                                        icon: const Icon(
-                                          Icons.fullscreen,
-                                          color: Colors.white,
+                                        Expanded(
+                                            child: SliderTheme(
+                                          data: constants.getSliderThemeData(
+                                              colorAccent: _colorAccent),
+                                          child: Slider.adaptive(
+                                            value: _currentSeconds!,
+                                            max: _totalSeconds!,
+                                            min: 0,
+                                            label: _currentSeconds.toString(),
+                                            onChanged: (double value) {
+                                              _jumpTo(value);
+                                            },
+                                          ),
+                                        )),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 16),
+                                          child: Text(
+                                            _showTime!,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
                                         ),
-                                        onPressed: () => _fullScreenManager(),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          : AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              key: const ValueKey('b'),
-                              color: _confortMode!
-                                  ? Colors.deepOrange.withOpacity(0.1)
-                                  : Colors.transparent,
-                              height: height,
-                            ),
-                    ),
+                                        IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          icon: const Icon(
+                                            Icons.fullscreen,
+                                            color: Colors.white,
+                                          ),
+                                          onPressed: () => _fullScreenManager(),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : AnimatedContainer(
+                                duration: const Duration(seconds: 1),
+                                key: const ValueKey('a'),
+                                color: Colors.transparent,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 16),
+                                          child: Text(
+                                            _tittle!,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              shadows: [
+                                                Shadow(
+                                                  blurRadius: 10.0,
+                                                  color: Colors.black,
+                                                  offset: Offset(3.0, 2.0),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          padding: const EdgeInsets.all(0),
+                                          icon: const Icon(
+                                            Icons.settings_outlined,
+                                            color: Colors.white,
+                                          ),
+                                          onPressed: () {
+                                            _showScreenSettings();
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )),
                   )
                 : const Center(child: CircularProgressIndicator()),
             AnimatedSwitcher(
