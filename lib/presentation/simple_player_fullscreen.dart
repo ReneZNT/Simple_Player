@@ -365,6 +365,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                 ),
                                               ],
                                             ),
+                                            const Spacer(),
                                             Row(
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
