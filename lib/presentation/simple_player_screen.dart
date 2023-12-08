@@ -376,6 +376,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                         ),
                                       ],
                                     ),
+                                    const Spacer(),
                                     Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
