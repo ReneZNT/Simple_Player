@@ -1,12 +1,14 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:simple_player/simple_player.dart';
 import 'package:video_player/video_player.dart';
+
 import '../aplication/simple_aplication.dart';
-import '../model/simple_player_state.dart';
-import 'package:flutter/material.dart';
-import 'widgets/settings_screen.dart';
-import '../core/date_formatter.dart';
 import '../constants/constants.dart';
-import 'dart:async';
+import '../core/date_formatter.dart';
+import '../model/simple_player_state.dart';
+import 'widgets/settings_screen.dart';
 
 class SimplePlayerFullScreen extends StatefulWidget {
   final SimpleController simpleController;
@@ -31,6 +33,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   Constants constants = Constants();
 
   /// Attributes
+  late SimpleController simplePlayerController;
   late VideoPlayerController _videoPlayerController;
   late AnimationController _animationController;
   double? _currentSeconds = 0.0;
@@ -39,7 +42,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   String? _showTime = '-:-';
   String? _tittle = '';
   bool? _visibleSettings = false;
-  bool? _visibleControls = true;
+  // bool? _visibleControls = true;
   bool? _wasPlaying = false;
   bool? _confortMode = false;
   bool? _landscape = false;
@@ -87,7 +90,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   /// Controls the display of simple controls.
   _showAndHideControls(bool show) {
     /// Show the control interface
-    setState(() => _visibleControls = show);
+    simplePlayerController.showButtons();
   }
 
   /// Controls the video playback speed.
@@ -181,15 +184,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
       /// Configure a Delay to hide the interface controls
       Timer(const Duration(seconds: 1), () => _showAndHideControls(false));
-    }
-  }
-
-  /// Treat screen tapping to show or hide simple controllers.
-  _screenTap() {
-    if (_visibleControls!) {
-      _showAndHideControls(false);
-    } else {
-      _showAndHideControls(true);
     }
   }
 
@@ -292,12 +286,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (bool pop) async {
         _fullScreenManager();
-        return false;
+        return;
       },
       child: Material(
         color: Colors.black,
@@ -317,20 +310,19 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                     _videoPlayerController.value.isInitialized
                         ? Center(
                             child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 200),
-                              transitionBuilder:
-                                  (Widget child, Animation<double> animation) {
-                                return FadeTransition(
-                                    opacity: animation, child: child);
-                              },
-                              child: _visibleControls!
-                                  ? GestureDetector(
-                                      child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                transitionBuilder: (Widget child,
+                                    Animation<double> animation) {
+                                  return FadeTransition(
+                                      opacity: animation, child: child);
+                                },
+                                child: simplePlayerController.show
+                                    ? AnimatedContainer(
                                         duration: const Duration(seconds: 1),
                                         key: const ValueKey('a'),
                                         color: _confortMode!
                                             ? Colors.deepOrange.withOpacity(0.1)
-                                            : Colors.black.withOpacity(0.2),
+                                            : Colors.transparent,
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.stretch,
@@ -373,11 +365,16 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                 ),
                                               ],
                                             ),
-                                            Expanded(
-                                              child: Center(
-                                                child: IconButton(
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16),
+                                                  child: IconButton(
                                                     icon: AnimatedIcon(
-                                                        size: 40,
+                                                        size: 15,
                                                         color: Colors.white,
                                                         icon: AnimatedIcons
                                                             .play_pause,
@@ -385,20 +382,9 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                             _animationController),
                                                     onPressed: () =>
                                                         _playAndPauseSwitch(
-                                                            pauseButton: true)),
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 16),
-                                                    child: Text(_showTime!,
-                                                        style: const TextStyle(
-                                                            color:
-                                                                Colors.white))),
+                                                            pauseButton: true),
+                                                  ),
+                                                ),
                                                 Expanded(
                                                     child: SliderTheme(
                                                   data: constants
@@ -416,11 +402,21 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                     },
                                                   ),
                                                 )),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16),
+                                                  child: Text(
+                                                    _showTime!,
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
                                                 IconButton(
                                                   padding:
                                                       const EdgeInsets.all(0),
                                                   icon: const Icon(
-                                                    Icons.fullscreen_exit,
+                                                    Icons.fullscreen,
                                                     color: Colors.white,
                                                   ),
                                                   onPressed: () =>
@@ -430,21 +426,56 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      onTap: () => _screenTap(),
-                                    )
-                                  : GestureDetector(
-                                      child: AnimatedContainer(
+                                      )
+                                    : AnimatedContainer(
                                         duration: const Duration(seconds: 1),
-                                        key: const ValueKey('b'),
-                                        color: _confortMode!
-                                            ? Colors.deepOrange.withOpacity(0.1)
-                                            : Colors.transparent,
-                                        height: height,
-                                      ),
-                                      onTap: () => _screenTap(),
-                                    ),
-                            ),
+                                        key: const ValueKey('a'),
+                                        color: Colors.transparent,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16),
+                                                  child: Text(
+                                                    _tittle!,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      shadows: [
+                                                        Shadow(
+                                                          blurRadius: 10.0,
+                                                          color: Colors.black,
+                                                          offset:
+                                                              Offset(3.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  padding:
+                                                      const EdgeInsets.all(0),
+                                                  icon: const Icon(
+                                                    Icons.settings_outlined,
+                                                    color: Colors.white,
+                                                  ),
+                                                  onPressed: () {
+                                                    _showScreenSettings();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )),
                           )
                         : const Center(child: CircularProgressIndicator()),
                     AnimatedSwitcher(
@@ -459,6 +490,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                               speed: _speed!,
                               confortModeOn: _confortMode!,
                               onExit: () => _showScreenSettings(),
+                              showButtons: (value) => setState(
+                                  () => simplePlayerController.showButtons()),
                               confortClicked: (value) =>
                                   setState(() => _confortMode = value),
                               speedSelected: (value) => _speedSetter(value),
@@ -468,7 +501,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                   ],
                 ),
               )
-            : Center(child: CircularProgressIndicator()),
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }

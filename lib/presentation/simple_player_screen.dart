@@ -307,7 +307,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return AspectRatio(
@@ -490,6 +489,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                       onExit: () => _showScreenSettings(),
                       confortClicked: (value) =>
                           setState(() => _confortMode = value),
+                      showButtons: (value) =>
+                          setState(() => simpleController.showButtons()),
                       speedSelected: (value) => _speedSetter(value),
                     )
                   : const SizedBox(width: 1, height: 1),

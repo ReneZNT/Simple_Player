@@ -1,7 +1,8 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
-import 'playback_speed_options.dart';
+
 import 'brightness_slider.dart';
+import 'playback_speed_options.dart';
 
 class SettingsScreen extends StatefulWidget {
   double speed;
@@ -10,6 +11,7 @@ class SettingsScreen extends StatefulWidget {
   void Function()? onExit;
   final ValueSetter<bool> confortClicked;
   final ValueSetter<double> speedSelected;
+  final ValueSetter<bool> showButtons;
   SettingsScreen({
     Key? key,
     required this.speed,
@@ -18,6 +20,7 @@ class SettingsScreen extends StatefulWidget {
     required this.onExit,
     required this.confortClicked,
     required this.speedSelected,
+    required this.showButtons,
   }) : super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _onExit() => widget.onExit!();
   void _confortCallBack(bool value) => widget.confortClicked(value);
   void _speedCallBack(double value) => widget.speedSelected(value);
+  void _showButtonsCallBack(bool value) => widget.showButtons(value);
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +82,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      /// Here, the show buttons button is locked
+                      /// to this button so that an accidental
+                      /// bump on the screen causes a bad user experience.
+                      Material(
+                        color: Colors.transparent,
+                        child: IconButton(
+                          tooltip: 'Mostrar botões',
+                          splashRadius: 20,
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                          splashColor: widget.colorAccent,
+                          icon:
+                              Icon(Icons.visibility, color: widget.colorAccent),
+                          onPressed: () {
+                            _showButtonsCallBack(true);
+                          },
+                        ),
+                      ),
+
                       ///  Here, a yellow filter is applied
                       ///  so that the user can avoid blue
                       ///  light at night or an eventual eye strain.
                       Material(
                         color: Colors.transparent,
                         child: IconButton(
+                          tooltip: 'Modo conforto',
                           splashRadius: 20,
                           padding: EdgeInsets.zero,
                           visualDensity: VisualDensity.compact,
@@ -104,6 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       Material(
                         color: Colors.transparent,
                         child: IconButton(
+                          tooltip: 'Sair',
                           splashRadius: 20,
                           padding: EdgeInsets.zero,
                           visualDensity: VisualDensity.compact,
@@ -112,7 +137,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               color: widget.colorAccent),
                           onPressed: () => _onExit(),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 )
