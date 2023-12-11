@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:simple_player/simple_player.dart';
 import 'package:video_player/video_player.dart';
@@ -45,7 +43,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   // bool? _visibleControls = true;
   bool? _wasPlaying = false;
   bool? _confortMode = false;
-  bool? _landscape = false;
   bool? _playbackSetUp = false;
   Color? _colorAccent = Colors.red;
 
@@ -62,7 +59,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       } else {
         /// Hide the control interface
         setState(() => _visibleSettings = false);
-        _showAndHideControls(true);
       }
     } else if (!_visibleSettings! && playing) {
       /// pause
@@ -73,7 +69,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
     } else if (!_visibleSettings!) {
       /// Switch to displaying the control interface
       setState(() => _visibleSettings = true);
-      _showAndHideControls(false);
     }
   }
 
@@ -85,12 +80,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
     } else {
       return controller.value.aspectRatio;
     }
-  }
-
-  /// Controls the display of simple controls.
-  _showAndHideControls(bool show) {
-    /// Show the control interface
-    simplePlayerController.showButtons();
   }
 
   /// Controls the video playback speed.
@@ -149,7 +138,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
     /// Release the display of the interface
     setState(() {
-      _landscape = ratio > 1.0;
       _playbackSetUp = true;
     });
   }
@@ -181,9 +169,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       _wasPlaying = playing;
       _animationController.forward();
       _videoPlayerController.play();
-
-      /// Configure a Delay to hide the interface controls
-      Timer(const Duration(seconds: 1), () => _showAndHideControls(false));
     }
   }
 
@@ -218,7 +203,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
         widget.simpleController.updateController(_videoPlayerController);
         bool playing = _videoPlayerController.value.isPlaying;
         if (_currentSeconds == _totalSeconds && !playing) {
-          _showAndHideControls(true);
           _animationController.reverse();
           _jumpTo(0.0);
         }
@@ -237,12 +221,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
     String changeTime = '';
     widget.simpleController.listenPlayAndPause().listen((event) {
       if (changeTime != event) {
-        bool playing = _videoPlayerController.value.isPlaying;
-        if (playing) {
-          _showAndHideControls(false);
-        } else {
-          _showAndHideControls(true);
-        }
         changeTime = event;
       }
     });
@@ -490,6 +468,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                               colorAccent: _colorAccent!,
                               speed: _speed!,
                               confortModeOn: _confortMode!,
+                              showButtonsOn: simplePlayerController.show,
                               onExit: () => _showScreenSettings(),
                               showButtons: (value) => setState(
                                   () => simplePlayerController.showButtons()),

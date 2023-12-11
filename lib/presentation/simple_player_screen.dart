@@ -61,7 +61,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       } else {
         /// Hide the control interface
         setState(() => _visibleSettings = false);
-        _showAndHideControls(true);
       }
     } else if (!_visibleSettings! && playing) {
       /// pause
@@ -72,7 +71,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     } else if (!_visibleSettings!) {
       /// Switch to displaying the control interface
       setState(() => _visibleSettings = true);
-      _showAndHideControls(false);
     }
   }
 
@@ -84,14 +82,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     } else {
       return controller.value.aspectRatio;
     }
-  }
-
-  /// Controls the display of simple controls.
-  _showAndHideControls(bool show) {
-    /// Show the control interface
-    setState(() {
-      simpleController.showButtons();
-    });
   }
 
   /// Controls the video playback speed.
@@ -106,7 +96,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       _animationController.forward();
       _videoPlayerController.play();
       _wasPlaying = true;
-      _showAndHideControls(false);
     }
   }
 
@@ -190,9 +179,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       _wasPlaying = playing;
       _animationController.forward();
       _videoPlayerController.play();
-
-      /// Configure a Delay to hide the interface controls
-      Timer(const Duration(seconds: 1), () => _showAndHideControls(false));
     }
   }
 
@@ -237,7 +223,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
         widget.simpleController.updateController(_videoPlayerController);
         bool playing = _videoPlayerController.value.isPlaying;
         if (_currentSeconds == _totalSeconds && !playing) {
-          _showAndHideControls(true);
           _animationController.reverse();
           _jumpTo(0.0);
         }
@@ -256,12 +241,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     String changeTime = '';
     widget.simpleController.listenPlayAndPause().listen((event) {
       if (changeTime != event) {
-        bool playing = _videoPlayerController.value.isPlaying;
-        if (playing) {
-          _showAndHideControls(false);
-        } else {
-          _showAndHideControls(true);
-        }
         changeTime = event;
       }
     });
@@ -486,6 +465,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                   ? SettingsScreen(
                       colorAccent: _colorAccent!,
                       speed: _speed!,
+                      showButtonsOn: simpleController.show,
                       confortModeOn: _confortMode!,
                       onExit: () => _showScreenSettings(),
                       confortClicked: (value) =>

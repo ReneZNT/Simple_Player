@@ -8,6 +8,7 @@ class SettingsScreen extends StatefulWidget {
   double speed;
   Color colorAccent;
   bool confortModeOn;
+  bool showButtonsOn;
   void Function()? onExit;
   final ValueSetter<bool> confortClicked;
   final ValueSetter<double> speedSelected;
@@ -17,6 +18,7 @@ class SettingsScreen extends StatefulWidget {
     required this.speed,
     required this.colorAccent,
     required this.confortModeOn,
+    required this.showButtonsOn,
     required this.onExit,
     required this.confortClicked,
     required this.speedSelected,
@@ -93,8 +95,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           padding: EdgeInsets.zero,
                           visualDensity: VisualDensity.compact,
                           splashColor: widget.colorAccent,
-                          icon:
-                              Icon(Icons.visibility, color: widget.colorAccent),
+                          icon: Icon(Icons.visibility,
+                              color: widget.showButtonsOn
+                                  ? Colors.orange
+                                  : Colors.white),
                           onPressed: () {
                             _showButtonsCallBack(true);
                           },
