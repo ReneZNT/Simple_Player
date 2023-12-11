@@ -31,7 +31,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   Constants constants = Constants();
 
   /// Attributes
-  late SimpleController simplePlayerController;
+  late SimpleController simplePlayerController = widget.simpleController;
   late VideoPlayerController _videoPlayerController;
   late AnimationController _animationController;
   double? _currentSeconds = 0.0;
