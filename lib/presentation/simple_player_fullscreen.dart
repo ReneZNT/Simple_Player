@@ -106,7 +106,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
     /// UnlockRotation
     simpleAplication.lockAndUnlockScreen(lock: false).then((value) {
-      Navigator.pop(context, simplePlayerState);
+      Navigator.of(context).pop(simplePlayerState);
     });
   }
 

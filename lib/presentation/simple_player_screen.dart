@@ -120,19 +120,17 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
 
     /// FullScreenActivate
     simpleAplication.hideNavigation(true).then((value) {
-      Timer(const Duration(milliseconds: 50), () {
+      Timer(const Duration(milliseconds: 50), () async {
         /// Send to FullScreen
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SimplePlayerFullScreen(
-                  simpleController: widget.simpleController,
-                  simplePlayerSettings: simplePlayerSettings,
-                  simplePlayerState: simplePlayerState),
-            )).then((value) {
-          /// Retrieves and inserts the last state of the previous screen
-          _lastState(value);
-        });
+        SimplePlayerState value = await showDialog(
+            context: context,
+            builder: (context) => SimplePlayerFullScreen(
+                simpleController: widget.simpleController,
+                simplePlayerSettings: simplePlayerSettings,
+                simplePlayerState: simplePlayerState));
+
+        /// Retrieves and inserts the last state of the previous screen
+        _lastState(value);
       });
     });
   }
