@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:simple_player/simple_player.dart';
 import 'package:video_player/video_player.dart';
@@ -10,9 +12,12 @@ class SimpleAplication {
       SimplePlayerSettings simplePlayerSettings) {
     switch (simplePlayerSettings.type) {
       case 'network':
-        return VideoPlayerController.network(simplePlayerSettings.path!);
+        return VideoPlayerController.networkUrl(
+            Uri.parse(simplePlayerSettings.path!));
       case 'assets':
         return VideoPlayerController.asset(simplePlayerSettings.path!);
+      case 'file':
+        return VideoPlayerController.file(File(simplePlayerSettings.path!));
       default:
         return VideoPlayerController.network(example);
     }

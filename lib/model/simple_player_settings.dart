@@ -97,4 +97,24 @@ class SimplePlayerSettings {
       colorAccent: colorAccent,
     );
   }
+
+  factory SimplePlayerSettings.file(
+      {required String path,
+      String? label = '',
+      double? aspectRatio = 16 / 9,
+      bool? autoPlay = false,
+      bool? loopMode = false,
+      bool? forceAspectRatio = false,
+      Color? colorAccent = Colors.red}) {
+    return SimplePlayerSettings(
+      type: 'file',
+      path: path,
+      label: label,
+      aspectRatio: aspectRatio,
+      autoPlay: autoPlay,
+      loopMode: loopMode,
+      forceAspectRatio: forceAspectRatio,
+      colorAccent: colorAccent,
+    );
+  }
 }
