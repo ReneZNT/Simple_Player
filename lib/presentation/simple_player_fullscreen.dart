@@ -265,8 +265,10 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
       child: Material(
         color: Colors.black,
         child: _playbackSetUp!
