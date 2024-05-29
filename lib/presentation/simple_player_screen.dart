@@ -288,203 +288,209 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
-    return AspectRatio(
-      aspectRatio: simplePlayerSettings.aspectRatio!,
-      child: Container(
-        width: width,
-        color: Colors.black,
-        child: Stack(
-          children: [
-            if (!simplePlayerSettings.hideFrame)
-              Center(
-                child: AspectRatio(
-                  aspectRatio: _aspectRatioManager(_videoPlayerController),
-                  child: VideoPlayer(_videoPlayerController),
-                ),
+    Widget cont = Container(
+      width: width,
+      color: Colors.black,
+      child: Stack(
+        children: [
+          if (!simplePlayerSettings.hideFrame)
+            Center(
+              child: AspectRatio(
+                aspectRatio: _aspectRatioManager(_videoPlayerController),
+                child: VideoPlayer(_videoPlayerController),
               ),
-            _videoPlayerController.value.isInitialized
-                ? Center(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return FadeTransition(opacity: animation, child: child);
-                      },
-                      child: simpleController.show
-                          ? AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              key: const ValueKey('a'),
-                              color: _confortMode!
-                                  ? Colors.deepOrange.withOpacity(0.1)
-                                  : Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  if (!simplePlayerSettings.hideFrame)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 16),
-                                          child: Text(
-                                            _tittle!,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              shadows: [
-                                                Shadow(
-                                                  blurRadius: 10.0,
-                                                  color: Colors.black,
-                                                  offset: Offset(3.0, 2.0),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          padding: const EdgeInsets.all(0),
-                                          icon: const Icon(
-                                            Icons.settings_outlined,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () {
-                                            _showScreenSettings();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  if (!simplePlayerSettings.hideFrame)
-                                    const Spacer(),
+            ),
+          _videoPlayerController.value.isInitialized
+              ? Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                      return FadeTransition(opacity: animation, child: child);
+                    },
+                    child: simpleController.show
+                        ? AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            key: const ValueKey('a'),
+                            color: _confortMode!
+                                ? Colors.deepOrange.withOpacity(0.1)
+                                : Colors.transparent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (!simplePlayerSettings.hideFrame)
                                   Row(
-                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 16),
-                                        child: IconButton(
-                                          icon: AnimatedIcon(
-                                              size: 15,
-                                              color: Colors.white,
-                                              icon: AnimatedIcons.play_pause,
-                                              progress: _animationController),
-                                          onPressed: () => _playAndPauseSwitch(
-                                              pauseButton: true),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: SliderTheme(
-                                          data: constants.getSliderThemeData(
-                                              colorAccent: _colorAccent),
-                                          child: Slider.adaptive(
-                                            value: _currentSeconds!,
-                                            max: _totalSeconds!,
-                                            min: 0,
-                                            label: _currentSeconds.toString(),
-                                            onChanged: (double value) {
-                                              _jumpTo(value);
-                                            },
+                                        child: Text(
+                                          _tittle!,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 10.0,
+                                                color: Colors.black,
+                                                offset: Offset(3.0, 2.0),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
+                                      IconButton(
+                                        padding: const EdgeInsets.all(0),
+                                        icon: const Icon(
+                                          Icons.settings_outlined,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          _showScreenSettings();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                if (!simplePlayerSettings.hideFrame)
+                                  const Spacer(),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 16),
+                                      child: IconButton(
+                                        icon: AnimatedIcon(
+                                            size: 15,
+                                            color: Colors.white,
+                                            icon: AnimatedIcons.play_pause,
+                                            progress: _animationController),
+                                        onPressed: () => _playAndPauseSwitch(
+                                            pauseButton: true),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: SliderTheme(
+                                        data: constants.getSliderThemeData(
+                                            colorAccent: _colorAccent),
+                                        child: Slider.adaptive(
+                                          value: _currentSeconds!,
+                                          max: _totalSeconds!,
+                                          min: 0,
+                                          label: _currentSeconds.toString(),
+                                          onChanged: (double value) {
+                                            _jumpTo(value);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 16),
+                                      child: Text(
+                                        _showTime!,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    if (!simplePlayerSettings.hideFrame)
+                                      IconButton(
+                                        padding: const EdgeInsets.all(0),
+                                        icon: const Icon(
+                                          Icons.fullscreen,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () => _fullScreenManager(),
+                                      )
+                                    else
+                                      const SizedBox(width: 1),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        : AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            key: const ValueKey('a'),
+                            color: Colors.transparent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (!simplePlayerSettings.hideFrame)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 16),
                                         child: Text(
-                                          _showTime!,
+                                          _tittle!,
                                           style: const TextStyle(
-                                              color: Colors.white),
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 10.0,
+                                                color: Colors.black,
+                                                offset: Offset(3.0, 2.0),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                      if (!simplePlayerSettings.hideFrame)
-                                        IconButton(
-                                          padding: const EdgeInsets.all(0),
-                                          icon: const Icon(
-                                            Icons.fullscreen,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () => _fullScreenManager(),
+                                      IconButton(
+                                        padding: const EdgeInsets.all(0),
+                                        icon: const Icon(
+                                          Icons.settings_outlined,
+                                          color: Colors.white,
                                         ),
+                                        onPressed: () {
+                                          _showScreenSettings();
+                                        },
+                                      ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            )
-                          : AnimatedContainer(
-                              duration: const Duration(seconds: 1),
-                              key: const ValueKey('a'),
-                              color: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  if (!simplePlayerSettings.hideFrame)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 16),
-                                          child: Text(
-                                            _tittle!,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              shadows: [
-                                                Shadow(
-                                                  blurRadius: 10.0,
-                                                  color: Colors.black,
-                                                  offset: Offset(3.0, 2.0),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          padding: const EdgeInsets.all(0),
-                                          icon: const Icon(
-                                            Icons.settings_outlined,
-                                            color: Colors.white,
-                                          ),
-                                          onPressed: () {
-                                            _showScreenSettings();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
+                              ],
                             ),
-                    ),
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
+                          ),
                   ),
-            if (!simplePlayerSettings.hideFrame)
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(opacity: animation, child: child);
-                },
-                child: _visibleSettings!
-                    ? SettingsScreen(
-                        colorAccent: _colorAccent!,
-                        speed: _speed!,
-                        showButtonsOn: simpleController.show,
-                        confortModeOn: _confortMode!,
-                        onExit: () => _showScreenSettings(),
-                        confortClicked: (value) =>
-                            setState(() => _confortMode = value),
-                        showButtons: (value) =>
-                            setState(() => simpleController.showButtons()),
-                        speedSelected: (value) => _speedSetter(value),
-                      )
-                    : const SizedBox(width: 1, height: 1),
-              ),
-          ],
-        ),
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
+          if (!simplePlayerSettings.hideFrame)
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              child: _visibleSettings!
+                  ? SettingsScreen(
+                      colorAccent: _colorAccent!,
+                      speed: _speed!,
+                      showButtonsOn: simpleController.show,
+                      confortModeOn: _confortMode!,
+                      onExit: () => _showScreenSettings(),
+                      confortClicked: (value) =>
+                          setState(() => _confortMode = value),
+                      showButtons: (value) =>
+                          setState(() => simpleController.showButtons()),
+                      speedSelected: (value) => _speedSetter(value),
+                    )
+                  : const SizedBox(width: 1, height: 1),
+            ),
+        ],
       ),
     );
+
+    if (!simplePlayerSettings.hideFrame) {
+      return AspectRatio(
+        aspectRatio: simplePlayerSettings.aspectRatio!,
+        child: cont,
+      );
+    } else {
+      return cont;
+    }
   }
 }
