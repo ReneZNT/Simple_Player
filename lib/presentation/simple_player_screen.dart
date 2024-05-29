@@ -284,9 +284,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     _videoPlayerController.dispose();
   }
 
-  String convertSecondsToReadableString(int seconds) {
-    print("Seconds");
-    print(seconds);
+  String convertSecondsToReadableString(int milliseconds) {
+    int seconds = milliseconds ~/ 1000;
     int m = seconds ~/ 60;
     int s = seconds % 60;
 
@@ -400,7 +399,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 16),
                                       child: Text(
-                                        '${_showTime!} / ${convertSecondsToReadableString(int.parse(_totalSeconds!.toString()))}',
+                                        '${_showTime!} / ${convertSecondsToReadableString(_totalSeconds!.toInt())}',
                                         style: const TextStyle(
                                             color: Colors.white),
                                       ),
