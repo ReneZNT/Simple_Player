@@ -284,13 +284,23 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     _videoPlayerController.dispose();
   }
 
+  String convertSecondsToReadableString(int seconds) {
+    int m = seconds ~/ 60;
+    int s = seconds % 60;
+
+    return "$m:${s > 9 ? s : "0$s"}";
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
 
     Widget cont = Container(
       width: width,
-      color: Colors.black,
+      decoration: BoxDecoration(
+        color:
+            !simplePlayerSettings.hideFrame ? Colors.black : Colors.transparent,
+      ),
       child: Stack(
         children: [
           if (!simplePlayerSettings.hideFrame)
@@ -388,7 +398,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 16),
                                       child: Text(
-                                        _showTime!,
+                                        '${_showTime!} / ${convertSecondsToReadableString(_totalSeconds!.toInt())}',
                                         style: const TextStyle(
                                             color: Colors.white),
                                       ),
@@ -403,7 +413,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                         onPressed: () => _fullScreenManager(),
                                       )
                                     else
-                                      const SizedBox(width: 1),
+                                      const SizedBox(width: 20, height: 20),
                                   ],
                                 ),
                               ],
