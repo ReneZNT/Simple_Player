@@ -285,6 +285,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   }
 
   String convertSecondsToReadableString(int seconds) {
+    print("Seconds");
+    print(seconds);
     int m = seconds ~/ 60;
     int s = seconds % 60;
 
@@ -398,7 +400,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 16),
                                       child: Text(
-                                        '${_showTime!} / ${convertSecondsToReadableString(_totalSeconds!.toInt())}',
+                                        '${_showTime!} / ${convertSecondsToReadableString(int.parse(_totalSeconds!.toString()))}',
                                         style: const TextStyle(
                                             color: Colors.white),
                                       ),
