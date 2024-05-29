@@ -9,6 +9,7 @@ class SimplePlayerSettings {
   bool? loopMode;
   bool? forceAspectRatio;
   Color? colorAccent;
+  bool hideFrame;
 
   SimplePlayerSettings({
     required this.type,
@@ -19,6 +20,7 @@ class SimplePlayerSettings {
     required this.loopMode,
     required this.forceAspectRatio,
     required this.colorAccent,
+    this.hideFrame = false,
   });
 
   ///
@@ -65,7 +67,9 @@ class SimplePlayerSettings {
       bool? autoPlay = false,
       bool? loopMode = false,
       bool? forceAspectRatio = false,
-      Color? colorAccent = Colors.red}) {
+      Color? colorAccent = Colors.red,
+      bool hideFrame = false,
+      }) {
     return SimplePlayerSettings(
       type: 'network',
       path: path,
@@ -75,6 +79,7 @@ class SimplePlayerSettings {
       loopMode: loopMode,
       forceAspectRatio: forceAspectRatio,
       colorAccent: colorAccent,
+      hideFrame: hideFrame,
     );
   }
 
@@ -85,7 +90,9 @@ class SimplePlayerSettings {
       bool? autoPlay = false,
       bool? loopMode = false,
       bool? forceAspectRatio = false,
-      Color? colorAccent = Colors.red}) {
+      Color? colorAccent = Colors.red,
+      bool hideFrame = false,
+      }) {
     return SimplePlayerSettings(
       type: 'assets',
       path: path,
@@ -95,6 +102,7 @@ class SimplePlayerSettings {
       loopMode: loopMode,
       forceAspectRatio: forceAspectRatio,
       colorAccent: colorAccent,
+      hideFrame: hideFrame,
     );
   }
 
@@ -105,7 +113,9 @@ class SimplePlayerSettings {
       bool? autoPlay = false,
       bool? loopMode = false,
       bool? forceAspectRatio = false,
-      Color? colorAccent = Colors.red}) {
+      Color? colorAccent = Colors.red,
+      bool hideFrame = false,
+      }) {
     return SimplePlayerSettings(
       type: 'file',
       path: path,
@@ -115,6 +125,7 @@ class SimplePlayerSettings {
       loopMode: loopMode,
       forceAspectRatio: forceAspectRatio,
       colorAccent: colorAccent,
+      hideFrame: hideFrame,
     );
   }
 }

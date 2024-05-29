@@ -78,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   loopMode: true,
                   forceAspectRatio: false,
                   colorAccent: Colors.red,
+                  hideFrame: true,
                 ),
               ),
             ),

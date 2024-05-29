@@ -14,6 +14,7 @@ import 'widgets/settings_screen.dart';
 class SimplePlayerScrren extends StatefulWidget {
   final SimpleController simpleController;
   final SimplePlayerSettings simplePlayerSettings;
+
   const SimplePlayerScrren(
       {Key? key,
       required this.simpleController,
@@ -40,6 +41,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   double? _speed = 1.0;
   String? _showTime = '-:-';
   String? _tittle = '';
+
   // bool? _visibleControls = true;
   bool? _visibleSettings = false;
   bool? _autoPlay = false;
@@ -293,32 +295,32 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
         color: Colors.black,
         child: Stack(
           children: [
-            Center(
-              child: AspectRatio(
-                aspectRatio: _aspectRatioManager(_videoPlayerController),
-                child: VideoPlayer(_videoPlayerController),
+            if (!simplePlayerSettings.hideFrame)
+              Center(
+                child: AspectRatio(
+                  aspectRatio: _aspectRatioManager(_videoPlayerController),
+                  child: VideoPlayer(_videoPlayerController),
+                ),
               ),
-            ),
             _videoPlayerController.value.isInitialized
                 ? Center(
                     child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
-                        transitionBuilder:
-                            (Widget child, Animation<double> animation) {
-                          return FadeTransition(
-                              opacity: animation, child: child);
-                        },
-                        child: simpleController.show
-                            ? AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                key: const ValueKey('a'),
-                                color: _confortMode!
-                                    ? Colors.deepOrange.withOpacity(0.1)
-                                    : Colors.transparent,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
+                      duration: const Duration(milliseconds: 200),
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: simpleController.show
+                          ? AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              key: const ValueKey('a'),
+                              color: _confortMode!
+                                  ? Colors.deepOrange.withOpacity(0.1)
+                                  : Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  if (!simplePlayerSettings.hideFrame)
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -353,26 +355,26 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                         ),
                                       ],
                                     ),
+                                  if (!simplePlayerSettings.hideFrame)
                                     const Spacer(),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 16),
-                                          child: IconButton(
-                                            icon: AnimatedIcon(
-                                                size: 15,
-                                                color: Colors.white,
-                                                icon: AnimatedIcons.play_pause,
-                                                progress: _animationController),
-                                            onPressed: () =>
-                                                _playAndPauseSwitch(
-                                                    pauseButton: true),
-                                          ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: IconButton(
+                                          icon: AnimatedIcon(
+                                              size: 15,
+                                              color: Colors.white,
+                                              icon: AnimatedIcons.play_pause,
+                                              progress: _animationController),
+                                          onPressed: () => _playAndPauseSwitch(
+                                              pauseButton: true),
                                         ),
-                                        Expanded(
-                                            child: SliderTheme(
+                                      ),
+                                      Expanded(
+                                        child: SliderTheme(
                                           data: constants.getSliderThemeData(
                                               colorAccent: _colorAccent),
                                           child: Slider.adaptive(
@@ -384,16 +386,18 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                               _jumpTo(value);
                                             },
                                           ),
-                                        )),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 16),
-                                          child: Text(
-                                            _showTime!,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
                                         ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: Text(
+                                          _showTime!,
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      if (!simplePlayerSettings.hideFrame)
                                         IconButton(
                                           padding: const EdgeInsets.all(0),
                                           icon: const Icon(
@@ -402,19 +406,19 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                           ),
                                           onPressed: () => _fullScreenManager(),
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : AnimatedContainer(
-                                duration: const Duration(seconds: 1),
-                                key: const ValueKey('a'),
-                                color: Colors.transparent,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : AnimatedContainer(
+                              duration: const Duration(seconds: 1),
+                              key: const ValueKey('a'),
+                              color: Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  if (!simplePlayerSettings.hideFrame)
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -449,31 +453,35 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              )),
+                                ],
+                              ),
+                            ),
+                    ),
                   )
-                : const Center(child: CircularProgressIndicator()),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return FadeTransition(opacity: animation, child: child);
-              },
-              child: _visibleSettings!
-                  ? SettingsScreen(
-                      colorAccent: _colorAccent!,
-                      speed: _speed!,
-                      showButtonsOn: simpleController.show,
-                      confortModeOn: _confortMode!,
-                      onExit: () => _showScreenSettings(),
-                      confortClicked: (value) =>
-                          setState(() => _confortMode = value),
-                      showButtons: (value) =>
-                          setState(() => simpleController.showButtons()),
-                      speedSelected: (value) => _speedSetter(value),
-                    )
-                  : const SizedBox(width: 1, height: 1),
-            ),
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+            if (!simplePlayerSettings.hideFrame)
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return FadeTransition(opacity: animation, child: child);
+                },
+                child: _visibleSettings!
+                    ? SettingsScreen(
+                        colorAccent: _colorAccent!,
+                        speed: _speed!,
+                        showButtonsOn: simpleController.show,
+                        confortModeOn: _confortMode!,
+                        onExit: () => _showScreenSettings(),
+                        confortClicked: (value) =>
+                            setState(() => _confortMode = value),
+                        showButtons: (value) =>
+                            setState(() => simpleController.showButtons()),
+                        speedSelected: (value) => _speedSetter(value),
+                      )
+                    : const SizedBox(width: 1, height: 1),
+              ),
           ],
         ),
       ),
