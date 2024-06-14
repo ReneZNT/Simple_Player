@@ -12,6 +12,7 @@ class SimplePlayerFullScreen extends StatefulWidget {
   final SimpleController simpleController;
   final SimplePlayerSettings simplePlayerSettings;
   final SimplePlayerState simplePlayerState;
+
   const SimplePlayerFullScreen(
       {Key? key,
       required this.simpleController,
@@ -40,11 +41,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   String? _showTime = '-:-';
   String? _tittle = '';
   bool? _visibleSettings = false;
+
   // bool? _visibleControls = true;
   bool? _wasPlaying = false;
   bool? _confortMode = false;
   bool? _playbackSetUp = false;
-  Color? _colorAccent = Colors.red;
 
   /// Control settings block display.
   _showScreenSettings() {
@@ -230,10 +231,6 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   _initializeInterface() {
     simplePlayerSettings = widget.simplePlayerSettings;
 
-    setState(() {
-      _colorAccent = simplePlayerSettings.colorAccent;
-    });
-
     /// Methods
     _setupControllers(simplePlayerSettings);
     _secondsListener();
@@ -367,8 +364,9 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                     child: SliderTheme(
                                                   data: constants
                                                       .getSliderThemeData(
-                                                          colorAccent:
-                                                              _colorAccent),
+                                                    settings:
+                                                        simplePlayerSettings,
+                                                  ),
                                                   child: Slider.adaptive(
                                                     value: _currentSeconds!,
                                                     max: _totalSeconds!,
@@ -386,16 +384,19 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                           left: 16),
                                                   child: Text(
                                                     _showTime!,
-                                                    style: const TextStyle(
-                                                        color: Colors.white),
+                                                    style: TextStyle(
+                                                        color:
+                                                            simplePlayerSettings
+                                                                .timeColor),
                                                   ),
                                                 ),
                                                 IconButton(
                                                   padding:
                                                       const EdgeInsets.all(0),
-                                                  icon: const Icon(
+                                                  icon: Icon(
                                                     Icons.fullscreen,
-                                                    color: Colors.white,
+                                                    color: simplePlayerSettings
+                                                        .iconFullScreenColor,
                                                   ),
                                                   onPressed: () =>
                                                       _fullScreenManager(),
@@ -424,10 +425,12 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                           left: 16),
                                                   child: Text(
                                                     _tittle!,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
+                                                    style: TextStyle(
+                                                      color:
+                                                          simplePlayerSettings
+                                                              .titleColor,
                                                       fontSize: 16,
-                                                      shadows: [
+                                                      shadows: const [
                                                         Shadow(
                                                           blurRadius: 10.0,
                                                           color: Colors.black,
@@ -441,10 +444,10 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                 IconButton(
                                                   padding:
                                                       const EdgeInsets.all(0),
-                                                  icon: const Icon(
-                                                    Icons.settings_outlined,
-                                                    color: Colors.white,
-                                                  ),
+                                                  icon: Icon(
+                                                      Icons.settings_outlined,
+                                                      color: simplePlayerSettings
+                                                          .iconSettingColor),
                                                   onPressed: () {
                                                     _showScreenSettings();
                                                   },
@@ -464,7 +467,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                       },
                       child: _visibleSettings!
                           ? SettingsScreen(
-                              colorAccent: _colorAccent!,
+                              settings: simplePlayerSettings,
                               speed: _speed!,
                               confortModeOn: _confortMode!,
                               showButtonsOn: simplePlayerController.show,

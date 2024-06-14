@@ -1,5 +1,5 @@
-import 'package:simple_player/simple_player.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_player/simple_player.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -10,12 +10,14 @@ void main() {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   SimpleController simpleController = SimpleController();
+
   // Example link provided in the video_player package on which SimplePlayer is based.
   String url =
       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
@@ -77,8 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   autoPlay: false,
                   loopMode: true,
                   forceAspectRatio: false,
-                  colorAccent: Colors.red,
-                  hideFrame: true,
+                  hideFrame: false,
                 ),
               ),
             ),

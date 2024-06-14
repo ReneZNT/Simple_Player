@@ -5,6 +5,7 @@ import '../../constants/constants.dart';
 
 class BrightnessSlider extends StatefulWidget {
   final Color colorAccent;
+
   const BrightnessSlider({Key? key, required this.colorAccent})
       : super(key: key);
 
@@ -48,7 +49,8 @@ class BbrightnessStateSlider extends State<BrightnessSlider> {
         ),
         Expanded(
           child: SliderTheme(
-            data: constants.getSliderThemeData(colorAccent: widget.colorAccent),
+            data: constants.getSliderThemeData(
+                settings: null, colorAccent: widget.colorAccent),
             child: Slider(
               value: _brightness!,
               max: 1.0,

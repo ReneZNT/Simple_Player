@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../presentation/widgets/brightness_slider.dart';
+
 class SimplePlayerSettings {
   String? type;
   String? path;
@@ -8,8 +10,16 @@ class SimplePlayerSettings {
   bool? autoPlay;
   bool? loopMode;
   bool? forceAspectRatio;
-  Color? colorAccent;
+  SliderThemeData sliderThemeData;
+  double overlayOpacity;
   bool hideFrame;
+  Color iconSettingColor;
+  Color titleColor;
+  Color iconFullScreenColor;
+  Color timeColor;
+  Color playPauseColor;
+  BrightnessSlider brightnessSlider;
+  Color playBackSpeedColor;
 
   SimplePlayerSettings({
     required this.type,
@@ -19,8 +29,27 @@ class SimplePlayerSettings {
     required this.autoPlay,
     required this.loopMode,
     required this.forceAspectRatio,
-    required this.colorAccent,
+    this.sliderThemeData = const SliderThemeData(
+      activeTrackColor: Colors.red,
+      thumbColor: Colors.white,
+      inactiveTrackColor: Colors.grey,
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 7),
+      overlayColor: Colors.red,
+      overlayShape: RoundSliderOverlayShape(overlayRadius: 18),
+      activeTickMarkColor: Colors.white,
+      inactiveTickMarkColor: Colors.white,
+    ),
     this.hideFrame = false,
+    this.iconSettingColor = Colors.white,
+    this.titleColor = Colors.white,
+    this.iconFullScreenColor = Colors.white,
+    this.timeColor = Colors.white,
+    this.playPauseColor = Colors.white,
+    this.brightnessSlider = const BrightnessSlider(
+      colorAccent: Colors.red,
+    ),
+    this.playBackSpeedColor = Colors.red,
+    this.overlayOpacity = 0.5,
   });
 
   ///
@@ -56,20 +85,36 @@ class SimplePlayerSettings {
   /// ### bool? loopMode;
   /// If true: As soon as the video finishes playing, it will restart automatically.
   ///
-  /// ### Color? colorAccent;
-  /// Sets the SimplePlayer details color.
-  ///
 
-  factory SimplePlayerSettings.network(
-      {required String path,
-      String? label = '',
-      double? aspectRatio = 16 / 9,
-      bool? autoPlay = false,
-      bool? loopMode = false,
-      bool? forceAspectRatio = false,
-      Color? colorAccent = Colors.red,
-      bool hideFrame = false,
-      }) {
+  factory SimplePlayerSettings.network({
+    required String path,
+    String? label = '',
+    double? aspectRatio = 16 / 9,
+    bool? autoPlay = false,
+    bool? loopMode = false,
+    bool? forceAspectRatio = false,
+    SliderThemeData sliderThemeData = const SliderThemeData(
+      activeTrackColor: Colors.red,
+      thumbColor: Colors.white,
+      inactiveTrackColor: Colors.grey,
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 7),
+      overlayColor: Colors.red,
+      overlayShape: RoundSliderOverlayShape(overlayRadius: 18),
+      activeTickMarkColor: Colors.white,
+      inactiveTickMarkColor: Colors.white,
+    ),
+    double overlayOpacity = 0.5,
+    bool hideFrame = false,
+    Color iconSettingColor = Colors.white,
+    Color titleColor = Colors.white,
+    Color iconFullScreenColor = Colors.white,
+    Color timeColor = Colors.white,
+    Color playPauseColor = Colors.white,
+    BrightnessSlider brightnessSlider = const BrightnessSlider(
+      colorAccent: Colors.red,
+    ),
+    Color playBackSpeedColor = Colors.red,
+  }) {
     return SimplePlayerSettings(
       type: 'network',
       path: path,
@@ -78,21 +123,48 @@ class SimplePlayerSettings {
       autoPlay: autoPlay,
       loopMode: loopMode,
       forceAspectRatio: forceAspectRatio,
-      colorAccent: colorAccent,
       hideFrame: hideFrame,
+      sliderThemeData: sliderThemeData,
+      overlayOpacity: overlayOpacity,
+      iconSettingColor: iconSettingColor,
+      titleColor: titleColor,
+      iconFullScreenColor: iconFullScreenColor,
+      timeColor: timeColor,
+      playPauseColor: playPauseColor,
+      brightnessSlider: brightnessSlider,
+      playBackSpeedColor: playBackSpeedColor,
     );
   }
 
-  factory SimplePlayerSettings.assets(
-      {required String path,
-      String? label = '',
-      double? aspectRatio = 16 / 9,
-      bool? autoPlay = false,
-      bool? loopMode = false,
-      bool? forceAspectRatio = false,
-      Color? colorAccent = Colors.red,
-      bool hideFrame = false,
-      }) {
+  factory SimplePlayerSettings.assets({
+    required String path,
+    String? label = '',
+    double? aspectRatio = 16 / 9,
+    bool? autoPlay = false,
+    bool? loopMode = false,
+    bool? forceAspectRatio = false,
+    SliderThemeData sliderThemeData = const SliderThemeData(
+      activeTrackColor: Colors.red,
+      thumbColor: Colors.white,
+      inactiveTrackColor: Colors.grey,
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 7),
+      overlayColor: Colors.red,
+      overlayShape: RoundSliderOverlayShape(overlayRadius: 18),
+      activeTickMarkColor: Colors.white,
+      inactiveTickMarkColor: Colors.white,
+    ),
+    double overlayOpacity = 0.5,
+    bool hideFrame = false,
+    Color iconSettingColor = Colors.white,
+    Color titleColor = Colors.white,
+    Color iconFullScreenColor = Colors.white,
+    Color timeColor = Colors.white,
+    Color playPauseColor = Colors.white,
+    BrightnessSlider brightnessSlider = const BrightnessSlider(
+      colorAccent: Colors.red,
+    ),
+    Color playBackSpeedColor = Colors.red,
+  }) {
     return SimplePlayerSettings(
       type: 'assets',
       path: path,
@@ -101,21 +173,48 @@ class SimplePlayerSettings {
       autoPlay: autoPlay,
       loopMode: loopMode,
       forceAspectRatio: forceAspectRatio,
-      colorAccent: colorAccent,
       hideFrame: hideFrame,
+      sliderThemeData: sliderThemeData,
+      overlayOpacity: overlayOpacity,
+      iconSettingColor: iconSettingColor,
+      titleColor: titleColor,
+      iconFullScreenColor: iconFullScreenColor,
+      timeColor: timeColor,
+      playPauseColor: playPauseColor,
+      brightnessSlider: brightnessSlider,
+      playBackSpeedColor: playBackSpeedColor,
     );
   }
 
-  factory SimplePlayerSettings.file(
-      {required String path,
-      String? label = '',
-      double? aspectRatio = 16 / 9,
-      bool? autoPlay = false,
-      bool? loopMode = false,
-      bool? forceAspectRatio = false,
-      Color? colorAccent = Colors.red,
-      bool hideFrame = false,
-      }) {
+  factory SimplePlayerSettings.file({
+    required String path,
+    String? label = '',
+    double? aspectRatio = 16 / 9,
+    bool? autoPlay = false,
+    bool? loopMode = false,
+    bool? forceAspectRatio = false,
+    SliderThemeData sliderThemeData = const SliderThemeData(
+      activeTrackColor: Colors.red,
+      thumbColor: Colors.white,
+      inactiveTrackColor: Colors.grey,
+      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 7),
+      overlayColor: Colors.red,
+      overlayShape: RoundSliderOverlayShape(overlayRadius: 18),
+      activeTickMarkColor: Colors.white,
+      inactiveTickMarkColor: Colors.white,
+    ),
+    double overlayOpacity = 0.5,
+    bool hideFrame = false,
+    Color iconSettingColor = Colors.white,
+    Color titleColor = Colors.white,
+    Color iconFullScreenColor = Colors.white,
+    Color timeColor = Colors.white,
+    Color playPauseColor = Colors.white,
+    BrightnessSlider brightnessSlider = const BrightnessSlider(
+      colorAccent: Colors.red,
+    ),
+    Color playBackSpeedColor = Colors.red,
+  }) {
     return SimplePlayerSettings(
       type: 'file',
       path: path,
@@ -124,8 +223,16 @@ class SimplePlayerSettings {
       autoPlay: autoPlay,
       loopMode: loopMode,
       forceAspectRatio: forceAspectRatio,
-      colorAccent: colorAccent,
       hideFrame: hideFrame,
+      sliderThemeData: sliderThemeData,
+      overlayOpacity: overlayOpacity,
+      iconSettingColor: iconSettingColor,
+      titleColor: titleColor,
+      iconFullScreenColor: iconFullScreenColor,
+      timeColor: timeColor,
+      playPauseColor: playPauseColor,
+      brightnessSlider: brightnessSlider,
+      playBackSpeedColor: playBackSpeedColor,
     );
   }
 }

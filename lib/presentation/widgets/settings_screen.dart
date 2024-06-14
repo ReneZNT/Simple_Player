@@ -1,22 +1,23 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:simple_player/model/simple_player_settings.dart';
 
-import 'brightness_slider.dart';
 import 'playback_speed_options.dart';
 
 class SettingsScreen extends StatefulWidget {
   double speed;
-  Color colorAccent;
+  SimplePlayerSettings settings;
   bool confortModeOn;
   bool showButtonsOn;
   void Function()? onExit;
   final ValueSetter<bool> confortClicked;
   final ValueSetter<double> speedSelected;
   final ValueSetter<bool> showButtons;
+
   SettingsScreen({
     Key? key,
     required this.speed,
-    required this.colorAccent,
+    required this.settings,
     required this.confortModeOn,
     required this.showButtonsOn,
     required this.onExit,
@@ -32,8 +33,11 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   /// ReturnValue
   void _onExit() => widget.onExit!();
+
   void _confortCallBack(bool value) => widget.confortClicked(value);
+
   void _speedCallBack(double value) => widget.speedSelected(value);
+
   void _showButtonsCallBack(bool value) => widget.showButtons(value);
 
   @override
@@ -64,12 +68,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(
-                    child: BrightnessSlider(colorAccent: widget.colorAccent)),
+                Expanded(child: widget.settings.brightnessSlider),
                 Expanded(
                   child: PlaybackSpeedOptions(
                     speed: widget.speed,
-                    colorAccent: widget.colorAccent,
+                    colorAccent: widget.settings.playBackSpeedColor,
                     speedSelected: (value) => _speedCallBack(value),
                   ),
                 ),
@@ -94,7 +97,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           splashRadius: 20,
                           padding: EdgeInsets.zero,
                           visualDensity: VisualDensity.compact,
-                          splashColor: widget.colorAccent,
+                          splashColor: widget.settings.playBackSpeedColor,
                           icon: Icon(Icons.visibility,
                               color: widget.showButtonsOn
                                   ? Colors.orange
@@ -136,9 +139,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           splashRadius: 20,
                           padding: EdgeInsets.zero,
                           visualDensity: VisualDensity.compact,
-                          splashColor: widget.colorAccent,
+                          splashColor: widget.settings.playBackSpeedColor,
                           icon: Icon(Icons.exit_to_app_rounded,
-                              color: widget.colorAccent),
+                              color: widget.settings.playBackSpeedColor),
                           onPressed: () => _onExit(),
                         ),
                       ),

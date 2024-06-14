@@ -48,7 +48,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   bool? _loopMode = false;
   bool? _wasPlaying = false;
   bool? _confortMode = false;
-  Color? _colorAccent = Colors.red;
 
   /// Control settings block display.
   _showScreenSettings() {
@@ -253,7 +252,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       _tittle = widget.simplePlayerSettings.label;
       _autoPlay = widget.simplePlayerSettings.autoPlay!;
       _loopMode = widget.simplePlayerSettings.loopMode!;
-      _colorAccent = widget.simplePlayerSettings.colorAccent;
     });
 
     /// Methods
@@ -339,10 +337,11 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                             const EdgeInsets.only(left: 16),
                                         child: Text(
                                           _tittle!,
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                          style: TextStyle(
+                                            color:
+                                                simplePlayerSettings.titleColor,
                                             fontSize: 16,
-                                            shadows: [
+                                            shadows: const [
                                               Shadow(
                                                 blurRadius: 10.0,
                                                 color: Colors.black,
@@ -354,9 +353,10 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                       ),
                                       IconButton(
                                         padding: const EdgeInsets.all(0),
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.settings_outlined,
-                                          color: Colors.white,
+                                          color: simplePlayerSettings
+                                              .iconSettingColor,
                                         ),
                                         onPressed: () {
                                           _showScreenSettings();
@@ -374,7 +374,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                       child: IconButton(
                                         icon: AnimatedIcon(
                                             size: 15,
-                                            color: Colors.white,
+                                            color: simplePlayerSettings
+                                                .playPauseColor,
                                             icon: AnimatedIcons.play_pause,
                                             progress: _animationController),
                                         onPressed: () => _playAndPauseSwitch(
@@ -384,7 +385,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                     Expanded(
                                       child: SliderTheme(
                                         data: constants.getSliderThemeData(
-                                            colorAccent: _colorAccent),
+                                            settings: simplePlayerSettings),
                                         child: Slider.adaptive(
                                           value: _currentSeconds!,
                                           max: _totalSeconds!,
@@ -400,16 +401,18 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                       padding: const EdgeInsets.only(left: 16),
                                       child: Text(
                                         '${_showTime!} / ${convertSecondsToReadableString(_totalSeconds!.toInt())}',
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                        style: TextStyle(
+                                          color: simplePlayerSettings.timeColor,
+                                        ),
                                       ),
                                     ),
                                     if (!simplePlayerSettings.hideFrame)
                                       IconButton(
                                         padding: const EdgeInsets.all(0),
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.fullscreen,
-                                          color: Colors.white,
+                                          color: simplePlayerSettings
+                                              .iconFullScreenColor,
                                         ),
                                         onPressed: () => _fullScreenManager(),
                                       )
@@ -437,10 +440,11 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                             const EdgeInsets.only(left: 16),
                                         child: Text(
                                           _tittle!,
-                                          style: const TextStyle(
-                                            color: Colors.white,
+                                          style: TextStyle(
+                                            color:
+                                                simplePlayerSettings.titleColor,
                                             fontSize: 16,
-                                            shadows: [
+                                            shadows: const [
                                               Shadow(
                                                 blurRadius: 10.0,
                                                 color: Colors.black,
@@ -452,9 +456,10 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                       ),
                                       IconButton(
                                         padding: const EdgeInsets.all(0),
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.settings_outlined,
-                                          color: Colors.white,
+                                          color: simplePlayerSettings
+                                              .iconSettingColor,
                                         ),
                                         onPressed: () {
                                           _showScreenSettings();
@@ -478,7 +483,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
               },
               child: _visibleSettings!
                   ? SettingsScreen(
-                      colorAccent: _colorAccent!,
+                      settings: simplePlayerSettings,
                       speed: _speed!,
                       showButtonsOn: simpleController.show,
                       confortModeOn: _confortMode!,
