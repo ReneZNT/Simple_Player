@@ -49,6 +49,15 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   bool? _wasPlaying = false;
   bool? _confortMode = false;
 
+  //lister VideoPlayerController errors and update SimpleController
+  void _listenError() {
+    _videoPlayerController.addListener(() {
+      if (_videoPlayerController.value.hasError) {
+        simpleController.setError(true);
+      }
+    });
+  }
+
   /// Control settings block display.
   _showScreenSettings() {
     bool playing = _videoPlayerController.value.isPlaying;
@@ -204,6 +213,9 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
 
           /// Methods after settings
           _autoPlayChecker(_autoPlay);
+
+          /// Listen errors
+          _listenError();
         },
       );
 

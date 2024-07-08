@@ -8,8 +8,21 @@ class SimpleController extends ChangeNotifier {
   late Duration position = const Duration().abs();
   bool show = true;
   String _changePlay = '';
+  bool error = false;
 
   SimpleController();
+
+  void setError(bool value) {
+    error = value;
+    notifyListeners();
+  }
+
+  Stream<bool> listenError() async* {
+    while (true) {
+      yield error;
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+  }
 
   /// ▶️ Start playing the video
   void play() {
