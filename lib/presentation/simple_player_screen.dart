@@ -38,7 +38,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   late SimpleController simpleController = widget.simpleController;
   double? _currentSeconds = 0.0;
   double? _totalSeconds = 0.0;
-  double? _speed = 1.0;
+  double? lastSpeed = 1.0;
   String? _showTime = '-:-';
   String? _tittle = '';
 
@@ -54,6 +54,16 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     _videoPlayerController.addListener(() {
       if (_videoPlayerController.value.hasError) {
         simpleController.setError(true);
+      }
+    });
+  }
+
+  /// Listen to the speed of the video.
+  void listenSpeed() {
+    simpleController.listenSpeed().listen((event) {
+      if (lastSpeed != event) {
+        lastSpeed = event;
+        _speedSetter(event);
       }
     });
   }
@@ -96,7 +106,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
 
   /// Controls the video playback speed.
   _speedSetter(double? speed) async {
-    setState(() => _speed = speed);
+    setState(() => lastSpeed = speed);
+    if (simpleController.speed != speed) simpleController.setSpeed(speed!);
     _videoPlayerController.setPlaybackSpeed(speed!);
   }
 
@@ -114,7 +125,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     SimplePlayerState simplePlayerState = SimplePlayerState(
         currentSeconds: _currentSeconds,
         totalSeconds: _totalSeconds,
-        speed: _speed,
+        speed: lastSpeed,
         showTime: _showTime,
         label: _tittle,
         autoPlay: _autoPlay,
@@ -149,7 +160,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   _lastState(SimplePlayerState simplePlayerState) {
     bool playing = false;
     setState(() {
-      _speed = simplePlayerState.speed;
+      lastSpeed = simplePlayerState.speed;
       _tittle = simplePlayerState.label;
       _wasPlaying = simplePlayerState.wasPlaying;
       _confortMode = simplePlayerState.confortMode;
@@ -245,6 +256,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
         });
       },
     );
+
+    listenSpeed();
   }
 
   /// Shows or hides the HUB from controller commands.
@@ -496,7 +509,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
               child: _visibleSettings!
                   ? SettingsScreen(
                       settings: simplePlayerSettings,
-                      speed: _speed!,
+                      speed: lastSpeed!,
                       showButtonsOn: simpleController.show,
                       confortModeOn: _confortMode!,
                       onExit: () => _showScreenSettings(),

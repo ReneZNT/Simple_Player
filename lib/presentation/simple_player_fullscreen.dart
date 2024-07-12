@@ -37,7 +37,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   late AnimationController _animationController;
   double? _currentSeconds = 0.0;
   double? _totalSeconds = 0.0;
-  double? _speed = 1.0;
+  double? lastSpeed = 1.0;
   String? _showTime = '-:-';
   String? _tittle = '';
   bool? _visibleSettings = false;
@@ -46,6 +46,25 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   bool? _wasPlaying = false;
   bool? _confortMode = false;
   bool? _playbackSetUp = false;
+
+  //lister VideoPlayerController errors and update SimpleController
+  void _listenError() {
+    _videoPlayerController.addListener(() {
+      if (_videoPlayerController.value.hasError) {
+        simplePlayerController.setError(true);
+      }
+    });
+  }
+
+  /// Listen to the speed of the video.
+  void listenSpeed() {
+    simplePlayerController.listenSpeed().listen((event) {
+      if (lastSpeed != event) {
+        lastSpeed = event;
+        _speedSetter(event);
+      }
+    });
+  }
 
   /// Control settings block display.
   _showScreenSettings() {
@@ -85,7 +104,10 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
   /// Controls the video playback speed.
   _speedSetter(double? speed) async {
-    setState(() => _speed = speed);
+    setState(() => lastSpeed = speed);
+    if (simplePlayerController.speed != speed) {
+      simplePlayerController.setSpeed(speed!);
+    }
     _videoPlayerController.setPlaybackSpeed(speed!);
   }
 
@@ -94,7 +116,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
     SimplePlayerState simplePlayerState = SimplePlayerState(
         currentSeconds: _currentSeconds,
         totalSeconds: _totalSeconds,
-        speed: _speed,
+        speed: lastSpeed,
         showTime: _showTime,
         label: _tittle,
         autoPlay: simplePlayerSettings.autoPlay,
@@ -116,7 +138,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
     SimplePlayerState simplePlayerState = widget.simplePlayerState;
 
     setState(() {
-      _speed = simplePlayerState.speed;
+      lastSpeed = simplePlayerState.speed;
       _tittle = simplePlayerState.label;
       _wasPlaying = simplePlayerState.wasPlaying;
       _confortMode = simplePlayerState.confortMode;
@@ -186,6 +208,9 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
           /// Methods after settings
           _lastState();
+
+          /// Listen errors
+          _listenError();
         },
       );
 
@@ -215,6 +240,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
         });
       },
     );
+
+    listenSpeed();
   }
 
   /// Shows or hides the HUB from controller commands.
@@ -468,7 +495,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                       child: _visibleSettings!
                           ? SettingsScreen(
                               settings: simplePlayerSettings,
-                              speed: _speed!,
+                              speed: lastSpeed!,
                               confortModeOn: _confortMode!,
                               showButtonsOn: simplePlayerController.show,
                               onExit: () => _showScreenSettings(),

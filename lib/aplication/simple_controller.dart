@@ -9,6 +9,7 @@ class SimpleController extends ChangeNotifier {
   bool show = true;
   String _changePlay = '';
   bool error = false;
+  double speed = 1.0;
 
   SimpleController();
 
@@ -17,9 +18,21 @@ class SimpleController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSpeed(double value) {
+    speed = value;
+    notifyListeners();
+  }
+
   Stream<bool> listenError() async* {
     while (true) {
       yield error;
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+  }
+
+  Stream<double> listenSpeed() async* {
+    while (true) {
+      yield speed;
       await Future.delayed(const Duration(milliseconds: 50));
     }
   }
