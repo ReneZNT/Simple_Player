@@ -395,7 +395,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 16),
+                                      padding:
+                                          simplePlayerSettings.playPausePadding,
                                       child: IconButton(
                                         icon: AnimatedIcon(
                                             size: 15,
@@ -423,7 +424,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 16),
+                                      padding:
+                                          simplePlayerSettings.playPausePadding,
                                       child: Text(
                                         '${_showTime!} / ${convertSecondsToReadableString(_totalSeconds!.toInt())}',
                                         style: TextStyle(

@@ -20,6 +20,7 @@ class SimplePlayerSettings {
   Color playPauseColor;
   BrightnessSlider brightnessSlider;
   Color playBackSpeedColor;
+  EdgeInsets playPausePadding;
 
   SimplePlayerSettings({
     required this.type,
@@ -50,6 +51,7 @@ class SimplePlayerSettings {
     ),
     this.playBackSpeedColor = Colors.red,
     this.overlayOpacity = 0.5,
+    this.playPausePadding = const EdgeInsets.only(left: 16),
   });
 
   ///
@@ -114,6 +116,7 @@ class SimplePlayerSettings {
       colorAccent: Colors.red,
     ),
     Color playBackSpeedColor = Colors.red,
+    EdgeInsets playPausePadding = const EdgeInsets.only(left: 16),
   }) {
     return SimplePlayerSettings(
       type: 'network',
@@ -133,6 +136,7 @@ class SimplePlayerSettings {
       playPauseColor: playPauseColor,
       brightnessSlider: brightnessSlider,
       playBackSpeedColor: playBackSpeedColor,
+      playPausePadding: playPausePadding,
     );
   }
 
@@ -164,6 +168,7 @@ class SimplePlayerSettings {
       colorAccent: Colors.red,
     ),
     Color playBackSpeedColor = Colors.red,
+    EdgeInsets playPausePadding = const EdgeInsets.only(left: 16),
   }) {
     return SimplePlayerSettings(
       type: 'assets',
@@ -183,6 +188,7 @@ class SimplePlayerSettings {
       playPauseColor: playPauseColor,
       brightnessSlider: brightnessSlider,
       playBackSpeedColor: playBackSpeedColor,
+      playPausePadding: playPausePadding,
     );
   }
 
@@ -214,6 +220,7 @@ class SimplePlayerSettings {
       colorAccent: Colors.red,
     ),
     Color playBackSpeedColor = Colors.red,
+    EdgeInsets playPausePadding = const EdgeInsets.only(left: 16),
   }) {
     return SimplePlayerSettings(
       type: 'file',
@@ -233,6 +240,7 @@ class SimplePlayerSettings {
       playPauseColor: playPauseColor,
       brightnessSlider: brightnessSlider,
       playBackSpeedColor: playBackSpeedColor,
+      playPausePadding: playPausePadding,
     );
   }
 }
