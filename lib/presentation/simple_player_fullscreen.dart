@@ -212,6 +212,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       if (_totalSeconds == 0 && _currentSeconds == 0) {
         _dismissConstrollers();
         _initializeInterface();
+        while (!_videoPlayerController.value.isInitialized) {
+          Future.delayed(const Duration(milliseconds: 50));
+        }
+        _wasPlaying = playing;
+        _animationController.forward();
         _videoPlayerController.play();
       } else {
         _wasPlaying = playing;
