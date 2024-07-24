@@ -210,8 +210,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
     } else {
       /// play
       if (_totalSeconds == 0 && _currentSeconds == 0) {
-        _dismissConstrollers();
-        _initializeInterface();
+        _dismissConstrollers(false);
+        _initializeInterface(false);
         while (!_videoPlayerController.value.isInitialized) {
           Future.delayed(const Duration(milliseconds: 50));
         }
@@ -227,7 +227,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   }
 
   /// Responsible for correct initialization of all controllers.
-  _setupControllers(SimplePlayerSettings simplePlayerSettings) {
+  _setupControllers(SimplePlayerSettings simplePlayerSettings,
+      [bool animation = true]) {
     /// Video controller
     _videoPlayerController = simpleAplication.getControler(simplePlayerSettings)
       ..initialize().then(
@@ -250,11 +251,13 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       );
 
     /// Icons controller
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-      reverseDuration: const Duration(milliseconds: 400),
-    );
+    if (animation) {
+      _animationController = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 400),
+        reverseDuration: const Duration(milliseconds: 400),
+      );
+    }
   }
 
   /// Update the real-time seconds counter on replay.
@@ -296,11 +299,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   }
 
   /// Responsible for starting the interface
-  _initializeInterface() {
+  _initializeInterface([bool animation = true]) {
     simplePlayerSettings = widget.simplePlayerSettings;
 
     /// Methods
-    _setupControllers(simplePlayerSettings);
+    _setupControllers(simplePlayerSettings, animation);
     _secondsListener();
     _listenerPlayFromController();
   }
@@ -320,9 +323,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
   }
 
   /// Finalize resources
-  _dismissConstrollers() async {
-    _animationController.stop();
-    _animationController.dispose();
+  _dismissConstrollers([bool dismisAnimation = true]) async {
+    if (dismisAnimation) {
+      _animationController.stop();
+      _animationController.dispose();
+    }
     _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
   }

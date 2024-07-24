@@ -195,8 +195,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     } else {
       /// play
       if (_totalSeconds == 0 && _currentSeconds == 0) {
-        _dismissConstrollers();
-        _initializeInterface();
+        _dismissConstrollers(false);
+        _initializeInterface(false);
         while (!_videoPlayerController.value.isInitialized) {
           Future.delayed(const Duration(milliseconds: 50));
         }
@@ -221,7 +221,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   // }
 
   /// Responsible for correct initialization of all controllers.
-  _setupControllers(SimplePlayerSettings simplePlayerSettings) {
+  _setupControllers(SimplePlayerSettings simplePlayerSettings,
+      [bool animation = true]) {
     /// Video controller
     _videoPlayerController = simpleAplication.getControler(simplePlayerSettings)
       ..initialize().then(
@@ -245,11 +246,13 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       );
 
     /// Icons controller
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-      reverseDuration: const Duration(milliseconds: 400),
-    );
+    if (animation) {
+      _animationController = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 400),
+        reverseDuration: const Duration(milliseconds: 400),
+      );
+    }
   }
 
   /// Update the real-time seconds counter on replay.
@@ -291,7 +294,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   }
 
   /// Responsible for starting the interface
-  _initializeInterface() {
+  _initializeInterface([bool animation = true]) {
     setState(() {
       simplePlayerSettings = widget.simplePlayerSettings;
       _tittle = widget.simplePlayerSettings.label;
@@ -300,7 +303,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     });
 
     /// Methods
-    _setupControllers(simplePlayerSettings);
+    _setupControllers(simplePlayerSettings, animation);
     _secondsListener();
     _listenerPlayFromController();
   }
@@ -320,9 +323,11 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   }
 
   /// Finalize resources
-  _dismissConstrollers() async {
-    _animationController.stop();
-    _animationController.dispose();
+  _dismissConstrollers([bool dismisAnimation = true]) async {
+    if (dismisAnimation) {
+      _animationController.stop();
+      _animationController.dispose();
+    }
     _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
   }
