@@ -249,7 +249,10 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       () {
         widget.simpleController.updateController(_videoPlayerController);
         bool playing = _videoPlayerController.value.isPlaying;
-        if (_currentSeconds == _totalSeconds && !playing) {
+        if (_currentSeconds == _totalSeconds &&
+            !playing &&
+            _currentSeconds != 0 &&
+            _totalSeconds != 0) {
           _animationController.reverse();
           _jumpTo(0.0);
         }

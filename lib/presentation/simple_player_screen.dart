@@ -247,7 +247,10 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       () {
         widget.simpleController.updateController(_videoPlayerController);
         bool playing = _videoPlayerController.value.isPlaying;
-        if (_currentSeconds == _totalSeconds && !playing) {
+        if (_currentSeconds == _totalSeconds &&
+            !playing &&
+            _currentSeconds != 0 &&
+            _totalSeconds != 0) {
           _animationController.reverse();
           _jumpTo(0.0);
         }
@@ -325,6 +328,10 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
         return 'N:T';
       }
       String result = "$m:${s > 9 ? s : "0$s"}";
+      print(milliseconds);
+      print(seconds);
+      print(m);
+      print(result);
       return result;
     } catch (e) {
       return 'N:T';
