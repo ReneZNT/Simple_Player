@@ -4,7 +4,6 @@ import 'package:video_player/video_player.dart';
 
 import '../aplication/simple_aplication.dart';
 import '../constants/constants.dart';
-import '../core/date_formatter.dart';
 import '../model/simple_player_state.dart';
 import 'widgets/settings_screen.dart';
 
@@ -64,6 +63,24 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
         _speedSetter(event);
       }
     });
+  }
+
+  String convertSecondsToReadableString(int milliseconds) {
+    try {
+      int seconds = milliseconds ~/ 1000;
+      int m = seconds ~/ 60;
+      if (m > 999) {
+        return 'N:T';
+      }
+      int s = seconds % 60;
+      if (s > 59) {
+        return 'N:T';
+      }
+      String result = "$m:${s > 9 ? s : "0$s"}";
+      return result;
+    } catch (e) {
+      return 'N:T';
+    }
   }
 
   /// Control settings block display.
@@ -235,8 +252,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
         setState(() {
           _currentSeconds =
               _videoPlayerController.value.position.inMilliseconds.toDouble();
-          _showTime = DateFormatter()
-              .currentTime(_videoPlayerController.value.position);
+          _showTime = convertSecondsToReadableString(
+              _videoPlayerController.value.position.inMilliseconds);
         });
       },
     );
