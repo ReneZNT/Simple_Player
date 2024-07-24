@@ -219,8 +219,12 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       ..initialize().then(
         (_) {
           setState(() {
-            _totalSeconds =
-                _videoPlayerController.value.duration.inMilliseconds.toDouble();
+            _totalSeconds = _videoPlayerController.value.duration.inMilliseconds
+                        .toDouble() <
+                    0
+                ? 0.0
+                : _videoPlayerController.value.duration.inMilliseconds
+                    .toDouble();
           });
 
           /// Methods after settings
