@@ -318,6 +318,9 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
 
   String convertSecondsToReadableString(int milliseconds) {
     try {
+      if (milliseconds < 0) {
+        return 'N:T';
+      }
       int seconds = milliseconds ~/ 1000;
       int m = seconds ~/ 60;
       if (m > 999) {
@@ -328,10 +331,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
         return 'N:T';
       }
       String result = "$m:${s > 9 ? s : "0$s"}";
-      print(milliseconds);
-      print(seconds);
-      print(m);
-      print(result);
       return result;
     } catch (e) {
       return 'N:T';

@@ -67,6 +67,9 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
 
   String convertSecondsToReadableString(int milliseconds) {
     try {
+      if (milliseconds < 0) {
+        return 'N:T';
+      }
       int seconds = milliseconds ~/ 1000;
       int m = seconds ~/ 60;
       if (m > 999) {
