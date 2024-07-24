@@ -24,8 +24,7 @@ class SimplePlayerScrren extends StatefulWidget {
   State<SimplePlayerScrren> createState() => _SimplePlayerScrrenState();
 }
 
-class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
-    with SingleTickerProviderStateMixin {
+class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
   /// Classes and Packages
   SimpleAplication simpleAplication = SimpleAplication();
   late SimplePlayerSettings simplePlayerSettings;
@@ -33,7 +32,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
 
   /// Attributes
   late VideoPlayerController _videoPlayerController;
-  late AnimationController _animationController;
   late SimpleController simpleController = widget.simpleController;
   double? _currentSeconds = 0.0;
   double? _totalSeconds = 0.0;
@@ -113,7 +111,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   /// Checks if the video should be displayed in looping.
   _autoPlayChecker(bool? autoPlay) {
     if (autoPlay!) {
-      _animationController.forward();
       _videoPlayerController.play();
       _wasPlaying = true;
     }
@@ -190,22 +187,19 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
       } else {
         _wasPlaying = playing;
       }
-      _animationController.reverse();
       _videoPlayerController.pause();
     } else {
       /// play
       if (_totalSeconds == 0 && _currentSeconds == 0) {
-        _dismissConstrollers(false);
-        _initializeInterface(false);
+        _dismissConstrollers();
+        _initializeInterface();
         while (!_videoPlayerController.value.isInitialized) {
           Future.delayed(const Duration(milliseconds: 50));
         }
         _wasPlaying = playing;
-        _animationController.forward();
         _videoPlayerController.play();
       } else {
         _wasPlaying = playing;
-        _animationController.forward();
         _videoPlayerController.play();
       }
     }
@@ -221,8 +215,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   // }
 
   /// Responsible for correct initialization of all controllers.
-  _setupControllers(SimplePlayerSettings simplePlayerSettings,
-      [bool animation = true]) {
+  _setupControllers(SimplePlayerSettings simplePlayerSettings) {
     /// Video controller
     _videoPlayerController = simpleAplication.getControler(simplePlayerSettings)
       ..initialize().then(
@@ -244,15 +237,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
           _listenError();
         },
       );
-
-    /// Icons controller
-    if (animation) {
-      _animationController = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 400),
-        reverseDuration: const Duration(milliseconds: 400),
-      );
-    }
   }
 
   /// Update the real-time seconds counter on replay.
@@ -265,7 +249,6 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
             !playing &&
             _currentSeconds != 0 &&
             _totalSeconds != 0) {
-          _animationController.reverse();
           _jumpTo(0.0);
         }
         setState(() {
@@ -294,7 +277,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   }
 
   /// Responsible for starting the interface
-  _initializeInterface([bool animation = true]) {
+  _initializeInterface() {
     setState(() {
       simplePlayerSettings = widget.simplePlayerSettings;
       _tittle = widget.simplePlayerSettings.label;
@@ -303,7 +286,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
     });
 
     /// Methods
-    _setupControllers(simplePlayerSettings, animation);
+    _setupControllers(simplePlayerSettings);
     _secondsListener();
     _listenerPlayFromController();
   }
@@ -323,11 +306,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
   }
 
   /// Finalize resources
-  _dismissConstrollers([bool dismisAnimation = true]) async {
-    if (dismisAnimation) {
-      _animationController.stop();
-      _animationController.dispose();
-    }
+  _dismissConstrollers() async {
     _videoPlayerController.removeListener(() {});
     _videoPlayerController.dispose();
   }
@@ -436,12 +415,13 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                       padding:
                                           simplePlayerSettings.playPausePadding,
                                       child: IconButton(
-                                        icon: AnimatedIcon(
-                                            size: 15,
-                                            color: simplePlayerSettings
-                                                .playPauseColor,
-                                            icon: AnimatedIcons.play_pause,
-                                            progress: _animationController),
+                                        icon: Icon(
+                                          _videoPlayerController.value.isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
+                                          color: simplePlayerSettings
+                                              .playPauseColor,
+                                        ),
                                         onPressed: () => _playAndPauseSwitch(
                                             pauseButton: true),
                                       ),
