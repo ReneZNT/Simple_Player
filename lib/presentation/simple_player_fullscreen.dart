@@ -250,8 +250,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
           _jumpTo(0.0);
         }
         setState(() {
-          _currentSeconds =
-              _videoPlayerController.value.position.inMilliseconds.toDouble();
+          _currentSeconds = _videoPlayerController.value.position.inMilliseconds
+                      .toDouble() <
+                  0
+              ? 0.0
+              : _videoPlayerController.value.position.inMilliseconds.toDouble();
           _showTime = convertSecondsToReadableString(
               _videoPlayerController.value.position.inMilliseconds);
         });
