@@ -178,7 +178,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
 
   ///  Extremely precise control of all animations
   ///  in conjunction with play and pause of playback.
-  _playAndPauseSwitch({bool pauseButton = false}) {
+  _playAndPauseSwitch({bool pauseButton = false}) async {
     bool playing = _videoPlayerController.value.isPlaying;
     if (playing) {
       /// pause
@@ -194,7 +194,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
         _dismissConstrollers();
         _initializeInterface();
         while (!_videoPlayerController.value.isInitialized) {
-          Future.delayed(const Duration(milliseconds: 50));
+          await Future.delayed(const Duration(milliseconds: 50));
         }
         _wasPlaying = playing;
         _videoPlayerController.play();
