@@ -211,7 +211,13 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
       /// play
       _wasPlaying = playing;
       _animationController.forward();
-      _videoPlayerController.play();
+      if (_totalSeconds == 0 && _currentSeconds == 0) {
+        _dismissConstrollers();
+        _initializeInterface();
+        _videoPlayerController.play();
+      } else {
+        _videoPlayerController.play();
+      }
     }
   }
 
