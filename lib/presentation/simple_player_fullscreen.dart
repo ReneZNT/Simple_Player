@@ -412,8 +412,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen>
                                                         simplePlayerSettings,
                                                   ),
                                                   child: Slider.adaptive(
-                                                    value: _currentSeconds!,
-                                                    max: _totalSeconds!,
+                                                    value: _currentSeconds ?? 0,
+                                                    max: _totalSeconds ?? 0,
                                                     min: 0,
                                                     label: _currentSeconds
                                                         .toString(),

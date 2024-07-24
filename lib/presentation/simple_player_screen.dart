@@ -422,8 +422,8 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren>
                                         data: constants.getSliderThemeData(
                                             settings: simplePlayerSettings),
                                         child: Slider.adaptive(
-                                          value: _currentSeconds!,
-                                          max: _totalSeconds!,
+                                          value: _currentSeconds ?? 0,
+                                          max: _totalSeconds ?? 0,
                                           min: 0,
                                           label: _currentSeconds.toString(),
                                           onChanged: (double value) {
