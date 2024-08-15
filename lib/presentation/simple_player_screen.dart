@@ -217,26 +217,26 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
   /// Responsible for correct initialization of all controllers.
   _setupControllers(SimplePlayerSettings simplePlayerSettings) {
     /// Video controller
-    _videoPlayerController = simpleAplication.getControler(simplePlayerSettings)
-      ..initialize().then(
-        (_) {
-          setState(() {
-            _totalSeconds = _videoPlayerController.value.duration.inMilliseconds
-                        .toDouble() <
-                    0
-                ? 0.0
-                : _videoPlayerController.value.duration.inMilliseconds
-                    .toDouble();
-            _videoPlayerController.setLooping(_loopMode!);
-          });
+    _videoPlayerController =
+        simpleAplication.getControler(simplePlayerSettings);
+    _videoPlayerController.initialize().then(
+      (_) {
+        setState(() {
+          _totalSeconds = _videoPlayerController.value.duration.inMilliseconds
+                      .toDouble() <
+                  0
+              ? 0.0
+              : _videoPlayerController.value.duration.inMilliseconds.toDouble();
+          _videoPlayerController.setLooping(_loopMode!);
+        });
 
-          /// Methods after settings
-          _autoPlayChecker(_autoPlay);
+        /// Methods after settings
+        _autoPlayChecker(_autoPlay);
 
-          /// Listen errors
-          _listenError();
-        },
-      );
+        /// Listen errors
+        _listenError();
+      },
+    );
   }
 
   /// Update the real-time seconds counter on replay.

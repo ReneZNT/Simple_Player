@@ -224,25 +224,25 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
   /// Responsible for correct initialization of all controllers.
   _setupControllers(SimplePlayerSettings simplePlayerSettings) {
     /// Video controller
-    _videoPlayerController = simpleAplication.getControler(simplePlayerSettings)
-      ..initialize().then(
-        (_) {
-          setState(() {
-            _totalSeconds = _videoPlayerController.value.duration.inMilliseconds
-                        .toDouble() <
-                    0
-                ? 0.0
-                : _videoPlayerController.value.duration.inMilliseconds
-                    .toDouble();
-          });
+    _videoPlayerController =
+        simpleAplication.getControler(simplePlayerSettings);
+    _videoPlayerController.initialize().then(
+      (_) {
+        setState(() {
+          _totalSeconds = _videoPlayerController.value.duration.inMilliseconds
+                      .toDouble() <
+                  0
+              ? 0.0
+              : _videoPlayerController.value.duration.inMilliseconds.toDouble();
+        });
 
-          /// Methods after settings
-          _lastState();
+        /// Methods after settings
+        _lastState();
 
-          /// Listen errors
-          _listenError();
-        },
-      );
+        /// Listen errors
+        _listenError();
+      },
+    );
   }
 
   /// Update the real-time seconds counter on replay.
