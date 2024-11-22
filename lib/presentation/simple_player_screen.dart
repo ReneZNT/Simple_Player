@@ -10,23 +10,23 @@ import '../model/simple_player_state.dart';
 import 'simple_player_fullscreen.dart';
 import 'widgets/settings_screen.dart';
 
-class SimplePlayerScrren extends StatefulWidget {
+class SimplePlayerScreen extends StatefulWidget {
   final SimpleController simpleController;
   final SimplePlayerSettings simplePlayerSettings;
 
-  const SimplePlayerScrren(
+  const SimplePlayerScreen(
       {Key? key,
       required this.simpleController,
       required this.simplePlayerSettings})
       : super(key: key);
 
   @override
-  State<SimplePlayerScrren> createState() => _SimplePlayerScrrenState();
+  State<SimplePlayerScreen> createState() => _SimplePlayerScreenState();
 }
 
-class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
+class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
   /// Classes and Packages
-  SimpleAplication simpleAplication = SimpleAplication();
+  SimpleAplication simpleApplication = SimpleAplication();
   late SimplePlayerSettings simplePlayerSettings;
   Constants constants = Constants();
 
@@ -44,7 +44,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
   bool? _autoPlay = false;
   bool? _loopMode = false;
   bool? _wasPlaying = false;
-  bool? _confortMode = false;
+  bool? _comfortMode = false;
 
   //lister VideoPlayerController errors and update SimpleController
   void _listenError() {
@@ -127,16 +127,16 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
         autoPlay: _autoPlay,
         loopMode: _loopMode,
         wasPlaying: _videoPlayerController.value.isPlaying,
-        confortMode: _confortMode);
+        confortMode: _comfortMode);
 
     if (_videoPlayerController.value.isPlaying) _playAndPauseSwitch();
 
     /// LockRotation
     double ratio = _videoPlayerController.value.aspectRatio;
-    simpleAplication.lockAndUnlockScreen(lock: true, aspectRatio: ratio);
+    simpleApplication.lockAndUnlockScreen(lock: true, aspectRatio: ratio);
 
     /// FullScreenActivate
-    simpleAplication.hideNavigation(true).then((value) {
+    simpleApplication.hideNavigation(true).then((value) {
       Timer(const Duration(milliseconds: 50), () async {
         /// Send to FullScreen
         SimplePlayerState value = await showDialog(
@@ -159,7 +159,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
       lastSpeed = simplePlayerState.speed;
       _tittle = simplePlayerState.label;
       _wasPlaying = simplePlayerState.wasPlaying;
-      _confortMode = simplePlayerState.confortMode;
+      _comfortMode = simplePlayerState.confortMode;
       playing = simplePlayerState.wasPlaying!;
     });
 
@@ -218,7 +218,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
   _setupControllers(SimplePlayerSettings simplePlayerSettings) {
     /// Video controller
     _videoPlayerController =
-        simpleAplication.getControler(simplePlayerSettings);
+        simpleApplication.getController(simplePlayerSettings);
     _videoPlayerController.initialize().then(
       (_) {
         setState(() {
@@ -363,7 +363,7 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
                         ? AnimatedContainer(
                             duration: const Duration(seconds: 1),
                             key: const ValueKey('a'),
-                            color: _confortMode!
+                            color: _comfortMode!
                                 ? Colors.deepOrange.withOpacity(0.1)
                                 : Colors.transparent,
                             child: Column(
@@ -531,10 +531,10 @@ class _SimplePlayerScrrenState extends State<SimplePlayerScrren> {
                       settings: simplePlayerSettings,
                       speed: lastSpeed!,
                       showButtonsOn: simpleController.show,
-                      confortModeOn: _confortMode!,
+                      comfortModeOn: _comfortMode!,
                       onExit: () => _showScreenSettings(),
-                      confortClicked: (value) =>
-                          setState(() => _confortMode = value),
+                      comfortClicked: (value) =>
+                          setState(() => _comfortMode = value),
                       showButtons: (value) =>
                           setState(() => simpleController.showButtons()),
                       speedSelected: (value) => _speedSetter(value),

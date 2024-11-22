@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_player/simple_player.dart';
 import 'package:video_player/video_player.dart';
@@ -8,7 +9,7 @@ class SimpleAplication {
   String example =
       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
 
-  VideoPlayerController getControler(
+  VideoPlayerController getController(
       SimplePlayerSettings simplePlayerSettings) {
     switch (simplePlayerSettings.type) {
       case 'network':
@@ -53,6 +54,9 @@ class SimpleAplication {
 
   Future<bool> lockAndUnlockScreen(
       {required bool lock, double aspectRatio = 1.0}) async {
+    if (kIsWeb) {
+      return true;
+    }
     if (lock) {
       if (aspectRatio <= 1.0) {
         await SystemChrome.setPreferredOrientations([

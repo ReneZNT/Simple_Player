@@ -7,10 +7,10 @@ import 'playback_speed_options.dart';
 class SettingsScreen extends StatefulWidget {
   double speed;
   SimplePlayerSettings settings;
-  bool confortModeOn;
+  bool comfortModeOn;
   bool showButtonsOn;
   void Function()? onExit;
-  final ValueSetter<bool> confortClicked;
+  final ValueSetter<bool> comfortClicked;
   final ValueSetter<double> speedSelected;
   final ValueSetter<bool> showButtons;
 
@@ -18,10 +18,10 @@ class SettingsScreen extends StatefulWidget {
     Key? key,
     required this.speed,
     required this.settings,
-    required this.confortModeOn,
+    required this.comfortModeOn,
     required this.showButtonsOn,
     required this.onExit,
-    required this.confortClicked,
+    required this.comfortClicked,
     required this.speedSelected,
     required this.showButtons,
   }) : super(key: key);
@@ -34,7 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// ReturnValue
   void _onExit() => widget.onExit!();
 
-  void _confortCallBack(bool value) => widget.confortClicked(value);
+  void _comfortCallBack(bool value) => widget.comfortClicked(value);
 
   void _speedCallBack(double value) => widget.speedSelected(value);
 
@@ -120,11 +120,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           visualDensity: VisualDensity.compact,
                           splashColor: Colors.orangeAccent,
                           icon: Icon(Icons.nights_stay,
-                              color: widget.confortModeOn
+                              color: widget.comfortModeOn
                                   ? Colors.orange
                                   : Colors.white),
                           onPressed: () {
-                            _confortCallBack(!widget.confortModeOn);
+                            _comfortCallBack(!widget.comfortModeOn);
                           },
                         ),
                       ),

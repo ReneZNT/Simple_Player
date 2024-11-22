@@ -13,10 +13,10 @@ class PlaybackSpeedOptions extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<PlaybackSpeedOptions> createState() => PplaybackSpeedOptionsState();
+  State<PlaybackSpeedOptions> createState() => PlaybackSpeedOptionsState();
 }
 
-class PplaybackSpeedOptionsState extends State<PlaybackSpeedOptions> {
+class PlaybackSpeedOptionsState extends State<PlaybackSpeedOptions> {
   /// ReturnValue
   void _setCallBack(double value) {
     widget.speedSelected(value);

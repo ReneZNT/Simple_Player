@@ -10,12 +10,12 @@ class BrightnessSlider extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<BrightnessSlider> createState() => BbrightnessStateSlider();
+  State<BrightnessSlider> createState() => BrightnessStateSlider();
 }
 
-class BbrightnessStateSlider extends State<BrightnessSlider> {
+class BrightnessStateSlider extends State<BrightnessSlider> {
   /// Classes and Packages
-  SimpleAplication simpleAplication = SimpleAplication();
+  SimpleAplication simpleApplication = SimpleAplication();
   Constants constants = Constants();
 
   /// Attributes
@@ -56,7 +56,7 @@ class BbrightnessStateSlider extends State<BrightnessSlider> {
               max: 1.0,
               min: 0.0,
               divisions: 20,
-              label: simpleAplication.doubleConvert(_brightness!),
+              label: simpleApplication.doubleConvert(_brightness!),
               onChanged: (double value) {
                 _brightnessSetter(value);
               },

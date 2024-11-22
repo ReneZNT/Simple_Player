@@ -67,7 +67,7 @@ class SimplePlayer extends StatefulWidget {
 class _SimplePlayerState extends State<SimplePlayer> {
   @override
   Widget build(BuildContext context) {
-    return SimplePlayerScrren(
+    return SimplePlayerScreen(
       simpleController: widget.simpleController,
       simplePlayerSettings: widget.simplePlayerSettings,
     );

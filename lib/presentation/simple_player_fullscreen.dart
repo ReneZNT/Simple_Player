@@ -25,7 +25,7 @@ class SimplePlayerFullScreen extends StatefulWidget {
 
 class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
   /// Classes and Packages
-  SimpleAplication simpleAplication = SimpleAplication();
+  SimpleAplication simpleApplication = SimpleAplication();
   late SimplePlayerSettings simplePlayerSettings;
   Constants constants = Constants();
 
@@ -143,10 +143,11 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
         confortMode: _confortMode);
 
     /// FullScreenDisable
-    await simpleAplication.hideNavigation(false);
+    await simpleApplication.hideNavigation(false);
 
     /// UnlockRotation
-    simpleAplication.lockAndUnlockScreen(lock: false).then((value) {
+    simpleApplication.lockAndUnlockScreen(lock: false).then((value) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop(simplePlayerState);
     });
   }
@@ -175,7 +176,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
     /// to keep the display in landscape or portrait mode
 
     double ratio = _videoPlayerController.value.aspectRatio;
-    simpleAplication.lockAndUnlockScreen(lock: true, aspectRatio: ratio);
+    simpleApplication.lockAndUnlockScreen(lock: true, aspectRatio: ratio);
 
     /// Release the display of the interface
     setState(() {
@@ -225,7 +226,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
   _setupControllers(SimplePlayerSettings simplePlayerSettings) {
     /// Video controller
     _videoPlayerController =
-        simpleAplication.getControler(simplePlayerSettings);
+        simpleApplication.getController(simplePlayerSettings);
     _videoPlayerController.initialize().then(
       (_) {
         setState(() {
@@ -524,12 +525,12 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
                           ? SettingsScreen(
                               settings: simplePlayerSettings,
                               speed: lastSpeed!,
-                              confortModeOn: _confortMode!,
+                              comfortModeOn: _confortMode!,
                               showButtonsOn: simplePlayerController.show,
                               onExit: () => _showScreenSettings(),
                               showButtons: (value) => setState(
                                   () => simplePlayerController.showButtons()),
-                              confortClicked: (value) =>
+                              comfortClicked: (value) =>
                                   setState(() => _confortMode = value),
                               speedSelected: (value) => _speedSetter(value),
                             )
