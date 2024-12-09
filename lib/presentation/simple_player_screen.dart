@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_player/simple_player.dart';
 import 'package:video_player/video_player.dart';
@@ -173,7 +174,17 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
 
   ///  Sends playback to the specified point.
   _jumpTo(double value) {
-    _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
+    if (kDebugMode) {
+      print(value);
+    }
+    try{
+      _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
+    }catch(e, s){
+      if (kDebugMode) {
+        print(e);
+        print(s);
+      }
+    }
   }
 
   ///  Extremely precise control of all animations
@@ -191,6 +202,9 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
     } else {
       /// play
       if (_totalSeconds == 0 && _currentSeconds == 0) {
+        if (kDebugMode) {
+          print('Error: Video not loaded');
+        }
         _dismissConstrollers();
         _initializeInterface();
         while (!_videoPlayerController.value.isInitialized) {
@@ -249,6 +263,9 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
             !playing &&
             _currentSeconds != 0 &&
             _totalSeconds != 0) {
+          if (kDebugMode) {
+            print('Jump to 0');
+          }
           _jumpTo(0.0);
         }
         setState(() {
