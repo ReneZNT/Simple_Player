@@ -153,7 +153,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
   }
 
   /// Retrieves and inserts the last state of the previous screen
-  _lastState() {
+  _lastState() async {
     SimplePlayerState simplePlayerState = widget.simplePlayerState;
 
     setState(() {
@@ -165,7 +165,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
 
     /// Methods
     _videoPlayerController.setLooping(simplePlayerState.loopMode!);
-    _jumpTo(simplePlayerState.currentSeconds!);
+    await _jumpTo(simplePlayerState.currentSeconds!);
     _speedSetter(simplePlayerState.speed);
     _configureRotation();
   }
@@ -185,8 +185,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
   }
 
   ///  Sends playback to the specified point.
-  _jumpTo(double value) {
-    _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
+  _jumpTo(double value) async {
+    await _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
 
     if (_wasPlaying!) {
       _playAndPauseSwitch();
@@ -228,7 +228,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
     _videoPlayerController =
         simpleApplication.getController(simplePlayerSettings);
     _videoPlayerController.initialize().then(
-      (_) {
+      (_) async {
         setState(() {
           _totalSeconds = _videoPlayerController.value.duration.inMilliseconds
                       .toDouble() <
@@ -238,7 +238,7 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
         });
 
         /// Methods after settings
-        _lastState();
+        await _lastState();
 
         /// Listen errors
         _listenError();
@@ -249,14 +249,14 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
   /// Update the real-time seconds counter on replay.
   _secondsListener() {
     _videoPlayerController.addListener(
-      () {
+      () async {
         widget.simpleController.updateController(_videoPlayerController);
         bool playing = _videoPlayerController.value.isPlaying;
         if (_currentSeconds == _totalSeconds &&
             !playing &&
             _currentSeconds != 0 &&
             _totalSeconds != 0) {
-          _jumpTo(0.0);
+          await _jumpTo(0.0);
         }
         setState(() {
           _currentSeconds = _videoPlayerController.value.position.inMilliseconds
@@ -429,8 +429,8 @@ class _SimplePlayerFullScreenState extends State<SimplePlayerFullScreen> {
                                                     min: 0,
                                                     label: _currentSeconds
                                                         .toString(),
-                                                    onChanged: (double value) {
-                                                      _jumpTo(value);
+                                                    onChanged: (double value) async {
+                                                      await _jumpTo(value);
                                                     },
                                                   ),
                                                 )),

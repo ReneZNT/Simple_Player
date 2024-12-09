@@ -148,13 +148,13 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
                 simplePlayerState: simplePlayerState));
 
         /// Retrieves and inserts the last state of the previous screen
-        _lastState(value);
+        await _lastState(value);
       });
     });
   }
 
   /// Retrieves and inserts the last state of the previous screen
-  _lastState(SimplePlayerState simplePlayerState) {
+  _lastState(SimplePlayerState simplePlayerState) async {
     bool playing = false;
     setState(() {
       lastSpeed = simplePlayerState.speed;
@@ -164,7 +164,7 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
       playing = simplePlayerState.wasPlaying!;
     });
 
-    _jumpTo(simplePlayerState.currentSeconds!);
+    await _jumpTo(simplePlayerState.currentSeconds!);
     _speedSetter(simplePlayerState.speed);
 
     if (playing) {
@@ -173,12 +173,14 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
   }
 
   ///  Sends playback to the specified point.
-  _jumpTo(double value) {
+  _jumpTo(double value) async {
     if (kDebugMode) {
       print(value);
     }
     try{
-      _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
+      await _playAndPauseSwitch(pauseButton: true);
+      await _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
+      await _playAndPauseSwitch();
     }catch(e, s){
       if (kDebugMode) {
         print(e);
@@ -256,7 +258,7 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
   /// Update the real-time seconds counter on replay.
   _secondsListener() {
     _videoPlayerController.addListener(
-      () {
+      () async  {
         widget.simpleController.updateController(_videoPlayerController);
         bool playing = _videoPlayerController.value.isPlaying;
         if (_currentSeconds == _totalSeconds &&
@@ -266,7 +268,7 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
           if (kDebugMode) {
             print('Jump to 0');
           }
-          _jumpTo(0.0);
+          await _jumpTo(0.0);
         }
         setState(() {
           _currentSeconds = _videoPlayerController.value.position.inMilliseconds
@@ -452,8 +454,8 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
                                           max: _totalSeconds ?? 0,
                                           min: 0,
                                           label: _currentSeconds.toString(),
-                                          onChanged: (double value) {
-                                            _jumpTo(value);
+                                          onChanged: (double value) async {
+                                            await _jumpTo(value);
                                           },
                                         ),
                                       ),

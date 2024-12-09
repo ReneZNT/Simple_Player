@@ -23,7 +23,7 @@ class BrightnessStateSlider extends State<BrightnessSlider> {
 
   _brightnessSetter(double brightness) async {
     setState(() => _brightness = brightness);
-    ScreenBrightness().setScreenBrightness(brightness);
+    ScreenBrightness().setApplicationScreenBrightness(brightness);
   }
 
   _initializeInterface() async {
