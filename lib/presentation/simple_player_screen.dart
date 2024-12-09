@@ -178,9 +178,7 @@ class _SimplePlayerScreenState extends State<SimplePlayerScreen> {
       print(value);
     }
     try{
-      await _playAndPauseSwitch(pauseButton: true);
       await _videoPlayerController.seekTo(Duration(milliseconds: value.toInt()));
-      await _playAndPauseSwitch();
     }catch(e, s){
       if (kDebugMode) {
         print(e);
